@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Accueil ATPA</title>
+		<meta CHARSET="utf-8" />
+
+		<!-- Librairire bootstrap-->
+		{% load staticfiles %}
+		<!--<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.css" %}' media="screen"/>-->
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
+		<script type="text/javascript" src='{% static "appli/bootstrap/js/bootstrap.min.js" %}'></script>
+		
+		<!--Autres-->
+		
+		<script type="text/javascript" src='{% static "appli/JS/canvasjs.min.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/JS/styleSup.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/bootstrap/js/jquery.js" %}'></script>
+
+
+		
+	</head>
+	<body>
+		<section class="container-fluid">
+			<header class="page-header">
+				<h1  class="text-error offset3">Accueil</h1>
+				<section class="navbar pull-right">
+					<section class="navbar-inner">
+					<h4 class="brand">Connexion</h4>
+					<ul class="nav">
+						<li class="offset1"><h4> Enseignants</h4>
+							<ul class="navigation unstyled">
+								<li class="toggleSubMenu btn" title="Cliquer ici pour vous connecter  en tant qu'enseignant"><i class="icon-user"></i><span> Connexion</span>
+								<ul class="subMenu unstyled">
+									<li>    
+										<section class="span3">
+										<form class="form-inline" id="formconnexion" method="POST">{% csrf_token %}
+											
+											{{ form.username }}
+
+											{{ form.password }}
+											
+											<input type="submit" title="Cliquer ici pour vous connecter" class="btn btn-info btn-small pull-right" value="connexion"/>
+										</form>
+										</section>
+									</li>
+								</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="offset1"><h4>Etudiant</h4>
+							<ul class="navigation unstyled">
+								<li class="btn" title="Cliquer ici pour vous connecter  en tant qu'enseignant">
+								<a href="etudiant.html" title="Cliquer ici pour vous connecter en tant qu'étudiant">Commencer</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>																	
+			</header>
+		</section>
+			
+		<section class="container-fluid">
+			
+			<h1 class="text-center">ATPA</h1>
+			<br />
+			
+			<p class="text-center lead">Utiliser vos équipements personnels
+			 (téléphone, ordinateur portable, tablette électronique) pour répondre aux questions posées.</p>
+			 <p class="text-center lead">Pour cela rien de plus simple! Il suffit de cliquer sur Rejoindre en haut à droite et de répondre aux 
+			 questions posées dans le temps imparti</p>
+							
+    						
+		</section>
+	</body>
+</html>
+

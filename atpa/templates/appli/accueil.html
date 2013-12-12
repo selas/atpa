@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Accueil Enseignant</title>
+		<meta CHARSET="utf-8" />
+		
+		<!-- Librairire bootstrap-->
+		{% load staticfiles %}
+		<!--<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.css" %}' media="screen"/>-->
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
+		<script type="text/javascript" src='{% static "appli/bootstrap/js/bootstrap.min.js" %}'></script>
+		
+		<!--Autres-->
+		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
+		<script type="text/javascript" src='{% static "appli/JS/canvasjs.min.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/JS/styleSup.js" %}'></script>
+
+			
+	</head>
+	<body>
+		<section class="container-fluid">
+			<section class="span6 text-center">
+
+				<a href="../new_question" id="btncreation" class="btn btn-primary btn-large" 
+				title="Créer une nouvelle question"> Créer une nouvelle question</a>
+			
+				<!--<section id="sectionQuestionEnseignant">
+					<h4 id="questionEnseignant">Question</h4><br />
+					<section id="zone_rep">
+						
+					</section>
+					
+					<input type="button" class="btn btn-large" title="Cliquer ici pour valider votre question" 						value="Soumettre" onclick="">
+				</section>-->
+				
+			</section>
+				
+			<aside class="span4 offset2">
+				<section class="row-fluid">
+					
+					<section class="bloc well text-center">
+						<h1>Bienvenue</h1>
+					</section>
+
+					<section class="well">
+						<h2>Questions Fermées : </h2>
+							<section id="qestionFermee" class="text-center">
+								{% for question in question_list_simple %}
+									<p> <a href="#" title="cliquer ici pour accéder à la question">
+									{{ question.libelle_q }} </a> </p>
+								{% endfor %}	
+							</section>
+					</section>
+							
+					<section class="well">
+						<h2>Questions à choix Multiple : </h2>
+							<section id="qestionChoixMultiple" class="text-center">
+								{% for question in question_list_multiple %}
+									<p> <a href="#" title="cliquer ici pour accéder à la question">
+									{{ question.libelle_q }} </a> </p>
+								{% endfor %}
+							</section>
+					</section>
+							
+					<section class="well">
+						<h2>Questions Ouvertes : </h2>
+							<section id="qestionOuverte" class="text-center">
+								{% for question in question_list_alphanumerique %}
+									<p> <a href="#" title="cliquer ici pour accéder à la question">
+									{{ question.libelle_q }} </a> </p>
+								{% endfor %}
+							</section>
+					</section>
+							
+				</section>
+			</aside>
+		</section>
+	</body>
+</html>

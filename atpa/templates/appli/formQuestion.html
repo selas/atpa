@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Nouvelle Question</title>
+		<meta CHARSET="utf-8" />
+		<!-- Librairire bootstrap-->
+		{% load staticfiles %}
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.css" %}' media="screen"/>
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
+		<script src='{% static "appli/bootstrap/js/bootstrap.min.js" %}'></script>
+		
+		<!--Autres-->
+		<script type="text/javascript" src='{% static "appli/JS/canvasjs.min.js" %}'></script>
+		<script src='{% static "appli/JS/styleSup.js" %}'></script>
+		<script src='{% static "appli/bootstrap/js/jquery.js" %}'></script>		
+	</head>
+	<body>
+		<section class="container-fluid">
+			<header class="page-header">
+				<a href="../accueil" title="cliquer ici pour revenir à l'acceuil Enseignant">Acceuil Enseignant</a>
+			</header>
+			
+			
+			<form class="well">
+				<fieldset>
+					<legend>Création de question</legend>
+					
+					<ul class="navigation unstyled">
+						<li class="toggleSubMenu btn" title="cliquer ici pour choisir le style de question voulu">
+							<i class="icon-chevron-down"></i>
+							<span> Style de question</span>
+								<ul class="subMenu unstyled">
+									<li><a href="#" title="Pour créer une question Fermée" onclick="affrRF();">Question Fermée</a></li>
+									<li><a href="#" title="Pour créer une question à choix multiple" onclick="affrRO();">Question Ouverte</a></li>
+									<li><a href="#" title="Pour créer une question avec zone de saisie" onclick="affrRZS();">Zone de saisie</a></li>
+								</ul>
+						</li> 
+					</ul>
+					<span id="stylebtn"></span>
+					<button class="btn" onclick="cache();" title="cliquer ici pour réinitialiser l'affichage">RAZ</button>
+					<section class="text-center">
+						<br/>
+						<label for="id_intituleQuestion" title="Saisissez un intitulé de question">
+							Intitulé de la question :
+						</label>
+						{{ form.intituleQuestion }}
+						
+						<label for="id_temps" title="Saisissez une durée pour la question">
+							Temps imparti : 
+						</label>  
+						{{ form.temps }}
+
+						<label for="id_typeReponse" title="Saisissez un type de réponse">
+							Type de réponse : 
+						</label>  
+						{{ form.typeReponse }}
+
+						<label for="id_intituleReponse" title="Saisissez un type de réponse">
+							Intitulé de la réponse : 
+						</label>  
+						{{ form.intituleReponse }}
+
+						<label>
+							Cette réponse est elle valide ou non : 
+						</label>  
+
+						<label for="id_reponseValide_oui" title="Veuillez saisir le temps">
+							Oui 
+						</label>
+						{{ form.reponseValide_oui }}
+
+						<label for="id_reponseValide_non" title="Veuillez saisir le temps">
+							Non
+						</label>  
+						{{ form.reponseValide_non }}
+
+						
+						
+					</section>
+					
+					<p class="text-center">Réponse type : </p>
+					
+					<section id="AffRepFermee" class="text-center"> 
+						<!--<label for="web">
+							<input type="radio" name="origine" value="web" id="web" />
+							Oui 
+						</label>
+						<label for="hasard">
+							<input type="radio" name="origine" value="hasard" id="hasard" />Non 
+						</label>-->
+						ICI Reponses simple
+							
+					</section>
+					
+					<section id="AffRepOuverte" class="text-center">
+						ICI Reponses ouvertes
+					</section>
+					
+					<section id="AffRepSaisie" class="text-center">
+						ICI Reponses saisies
+					</section>
+					
+					<section class="text-center">
+						<button class="btn btn-primary btn-large" title="cliquer ici pour créer la question">
+							Créer
+						</button>
+					</section>
+					</fieldset>
+				</form>
+			
+		</section>
+	</body>
+</html>
