@@ -1,9 +1,38 @@
-/*#btncreation{
-padding-left:500 !important;
+#newQestion{
+margin-top:30%;
 }
-*/
 
-.span6{
-   margin-top: 20%;
+header{
+background-color:DarkBlue;
+-moz-border-radius:10px;
+-o-border-radius:10px;
+-webkit-border-radius:10px;
+border-radius:10px;
+}
+
+#lien{
+color:white;
+}
+
+#coverHead{
+background-image: url("../image/bann.jpg");
+
+}
+
+#atpa{
+margin-bottom:2%;
+font-size:500%;
+color:Indigo;
+}
+
+#question{
+font-size:200%;
+}
+
+#titrequestetu{
+font-size:200%;
+margin-top:-5%;
+padding-top:2.5%;
+margin-bottom:-5%;
 }
 

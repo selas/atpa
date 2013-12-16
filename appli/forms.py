@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-
 from django import forms
 
 class Connexion(forms.Form):
-	username = forms.CharField(max_length=100)
-	password = forms.CharField(widget=forms.PasswordInput)
-
+	
+	username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Login', 'class':'input-small'}))
+	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class':'input-small'}))
+	
 
 class AjoutQuestion(forms.Form):
 
