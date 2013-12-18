@@ -12,7 +12,7 @@ urlpatterns = patterns('',
 	#url(r'^form_question/$', 'appli.views.form_question', name='form_question'),
 
 	url(r'^connexion/$', 'appli.views.connexion', name='connexion'),
-	#url(r'^deconnexion/$', 'appli.views.deconnexion', name='deconnexion'),
+	url(r'^deconnexion/$', 'appli.views.deconnexion', name='deconnexion'),
 	url(r'^new_question/$', 'appli.views.new_question', name='new_question'),
 
 	#url(r'^error/$', 'appli.views.error', name='error')

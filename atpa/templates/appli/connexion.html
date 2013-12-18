@@ -28,7 +28,8 @@
 						<ul class="subMenu unstyled">
 							<li>    
 								<section class="span3">
-									<form class="form-inline" id="formconnexion" method="POST">{% csrf_token %}
+									<form class="form-inline" id="formconnexion" method="POST">
+										{% csrf_token %}
 													
 										{{ form.username }}
 										<!--ajouter equivalent du placeholder-->

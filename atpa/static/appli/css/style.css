@@ -46,9 +46,25 @@ header{
 	text-shadow:0px 0px 15px white;
 }
 
-#question{
-	font-size:200%;	
+#listeQuestion{
+	font-size:auto;	
+	overflow-y:scroll;
+	max-height: 250px;
+	margin-right:-19px;
+	list-style: none;
+	text-align:left;
 }
+
+#question{
+	margin: 0px 0px 10px;
+	padding:0px 10px 20px 10px;
+}
+
+#rechercheQuestion{
+	margin: 0px 0px 10px;
+	padding:0px 10px 0px 10px;
+}
+
 
 #titrequestetu{
 	font-size:200%;
@@ -57,7 +73,9 @@ header{
 	margin-bottom:-5%;
 }
 
-
+h2{
+	font-size: 20px;	
+}
 
 
 

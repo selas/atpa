@@ -24,5 +24,3 @@ class AjoutQuestion(forms.Form):
 
 	# reponseValide = forms.ChoiceField(widget = forms.Select, choices=CHOICES)
 
-	# intituleReponse_non = forms.CharField(max_length = 100)
-	# reponseValide_non = forms.BooleanField(default=True)

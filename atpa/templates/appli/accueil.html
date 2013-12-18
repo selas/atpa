@@ -21,7 +21,7 @@
 			<section class="page-header well text-center">
 				<span>Bienvenue {{user.username}}</span>
 				<span class="deconnexion">
-					<a href="../connexion" >
+					<a href="../deconnexion" >
 						<button class="btn btn-danger btn-mini">Déconnexion <i class="icon-white icon-off"></i></button>
 					</a>
 				</span>
@@ -50,42 +50,22 @@
 				<br />
 				<section class="row-fluid">
 
-					<section class="well">
-						<h4>Rechercher une question :</h4>
+					<section class="well" id="rechercheQuestion">
+						<h2>Rechercher une question :</h2>
 						<form method="POST">{% csrf_token %}
 							<input type="text" class="input-medium search-query">
 							<button type="submit" class="btn btn-primary">Rechercher</button>
 						</form>
 					</section>
 					
-					<section class="well">
-						<h2>Questions Fermées : </h2>
-							<section id="qestionFermee" class="text-center">
-								{% for question in question_list_simple %}
-									<p> <a href="#" title="cliquer ici pour accéder à la question">
-									{{ question.libelle_q }} </a> </p>
+					<section class="well" id="question">
+						<h2>Questions : </h2>
+							<ul id="listeQuestion" class="text-center">
+								{% for question in question_list %}
+									<li><a href="#" title="cliquer ici pour accéder à la question">
+									{{ question.libelle_q }} </a> 
 								{% endfor %}	
-							</section>
-					</section>
-							
-					<section class="well">
-						<h2>Questions à choix Multiple : </h2>
-							<section id="qestionChoixMultiple" class="text-center">
-								{% for question in question_list_multiple %}
-									<p> <a href="#" title="cliquer ici pour accéder à la question">
-									{{ question.libelle_q }} </a> </p>
-								{% endfor %}
-							</section>
-					</section>
-							
-					<section class="well">
-						<h2>Questions Ouvertes : </h2>
-							<section id="qestionOuverte" class="text-center">
-								{% for question in question_list_alphanumerique %}
-									<p> <a href="#" title="cliquer ici pour accéder à la question">
-									{{ question.libelle_q }} </a> </p>
-								{% endfor %}
-							</section>
+							</ul>
 					</section>
 					
 				</section>
