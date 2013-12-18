@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from appli.models import Question, Question_reponse
 from appli.forms import Connexion, AjoutQuestion
+from django.contrib.auth.models import User
+
 
 
 def connexion(request):
@@ -39,16 +41,35 @@ def connexion(request):
 				'form': form,'error': error
 				})
 	else:
-		form = Connexion() # An unbound form
-		return render(request, 'appli/connexion.html', {
-			'form': form,
-			})
+
+		if request.user is not None:
+
+			logout(request)
+			form = Connexion() # An unbound form
+			return render(request, 'appli/connexion.html', {
+				'form': form,
+				})
+			
+
+		else:
+			form = Connexion() # An unbound form
+			return render(request, 'appli/connexion.html', {
+				'form': form,
+				})
+
 
 		#if form.is_valid(): # All validation rules pass
 			#Redirect to a success page.
 		#	return HttpResponse("Connexion ok")
 		#else:
 			#Return a 'disabled account' error message 
+
+def deconnexion(request):
+	logout(request)
+	form = Connexion() # An unbound form
+	return render(request, 'appli/connexion.html', {
+					'form': form
+					})
 
 def new_question(request):
 	if request.method == 'POST' : # If the form has been submitted...
