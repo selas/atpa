@@ -9,40 +9,50 @@
 		<!--<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.css" %}' media="screen"/>-->
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
-		<script type="text/javascript" src='{% static "appli/bootstrap/js/bootstrap.min.js" %}'></script>
 		
 		<!--Autres-->
 		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
-		<script type="text/javascript" src='{% static "appli/JS/canvasjs.min.js" %}'></script>
-		<script type="text/javascript" src='{% static "appli/JS/styleSup.js" %}'></script>
-
-			
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 	</head>
+
+
 	<body>
+		<header>
+			<section class="page-header well text-center">
+				<span>Bienvenue {{user.username}}</span></span>
+			</section>
+		</header>
+		
 		<section class="container-fluid">
 			<section class="span6 text-center">
 
-				<a href="../new_question" id="btncreation" class="btn btn-primary btn-large" 
-				title="Créer une nouvelle question"> Créer une nouvelle question</a>
-			
+				<section id="newQestion">
+					<a href="../new_question" class="btn btn-primary btn-large" title="Cliquer ici pour créer une nouvelle question">Créer une nouvelle question</a>
+				</section>
+				
 				<!--<section id="sectionQuestionEnseignant">
 					<h4 id="questionEnseignant">Question</h4><br />
 					<section id="zone_rep">
 						
 					</section>
 					
-					<input type="button" class="btn btn-large" title="Cliquer ici pour valider votre question" 						value="Soumettre" onclick="">
+					<input type="button" class="btn btn-large" title="Cliquer ici pour valider votre question" value="Soumettre" onclick="">
 				</section>-->
 				
 			</section>
 				
 			<aside class="span4 offset2">
+				<br />
 				<section class="row-fluid">
-					
-					<section class="bloc well text-center">
-						<h1>Bienvenue</h1>
-					</section>
 
+					<section class="well">
+						<h4>Rechercher une question :</h4>
+						<form method="POST">{% csrf_token %}
+							<input type="text" class="input-medium search-query">
+							<button type="submit" class="btn btn-primary">Rechercher</button>
+						</form>
+					</section>
+					
 					<section class="well">
 						<h2>Questions Fermées : </h2>
 							<section id="qestionFermee" class="text-center">
@@ -72,9 +82,11 @@
 								{% endfor %}
 							</section>
 					</section>
-							
+					
 				</section>
 			</aside>
+
 		</section>
 	</body>
+
 </html>

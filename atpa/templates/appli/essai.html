@@ -6,7 +6,7 @@
 
 	<body>
 
-		<form action="/contact/" method="post">
+		<form action="#" method="POST">
 
 			<div class="connexion">
 				<!--{{ form.login.errors }}-->
@@ -17,7 +17,10 @@
 				<!--{{ form.password.errors }}-->
 				<label for="id_message">mot de passe : </label>
 				{{ form.password }}
-			</div>
+            </div>
+            {{ username_q }}
+            {{ temps_q }}
+            {{ libelle_q }}
 			
 			<p><input type="submit" value="Connexion" /></p>
 

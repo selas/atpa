@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render_to_response
 from django.shortcuts import render
-from appli.models import Question
+from appli.models import Question, Question_reponse
 from appli.forms import Connexion, AjoutQuestion
 
 
@@ -21,9 +21,9 @@ def connexion(request):
 				form = Connexion() # An unbound form
 				# Redirect to a success page.
 
-				question_list_simple = Question.objects.filter(typeReponse_q="Choix simple")
-				question_list_multiple = Question.objects.filter(typeReponse_q="Choix multiple")
-				question_list_alphanumerique = Question.objects.filter(typeReponse_q="Choix alphanumerique")
+				question_list_simple = Question.objects.filter(typeReponse_q="Choix simple",enseignant_q = user)
+				question_list_multiple = Question.objects.filter(typeReponse_q="Choix multiple",enseignant_q = user)
+				question_list_alphanumerique = Question.objects.filter(typeReponse_q="Choix alphanumerique",enseignant_q = user)
 				return render(request, 'appli/accueil.html' , { 'question_list_simple' : question_list_simple, 'question_list_multiple' : question_list_multiple, 'question_list_alphanumerique' : question_list_alphanumerique })
 
 			else:
@@ -51,32 +51,52 @@ def connexion(request):
 			#Return a 'disabled account' error message 
 
 def new_question(request):
-	if request.method == 'POST': # If the form has been submitted...
-		username = request.POST['username']
-		password = request.POST['password']
-		user = authenticate(username=username, password=password)
+	if request.method == 'POST' : # If the form has been submitted...
+		libelle_q = request.POST['intituleQuestion']
+		username_q = request.user
+		
+		temps_q = request.POST['temps'] # A form bound to the POST data
+#		typeReponse_q = request.POST['typeReponse']
 
-		form = Connexion(request.POST) # A form bound to the POST data
+		# form = AjoutQuestion(request.POST)
+		# if form.is_valid(): # All validation rules pass
+		maQuestion=Question(enseignant_q = username_q , libelle_q = libelle_q , temps_q = temps_q , typeReponse_q = 'Choix simple')
+		maQuestion.save()
+		
+		intituleReponseBonne1 = request.POST['intituleReponseBonne1']
+		# intituleReponseBonne2 = request.POST['intituleReponseBonne2']
+		# intituleReponseBonne3 = request.POST['intituleReponseBonne3']
+		# intituleReponseBonne4 = request.POST['intituleReponseBonne4']
+		intituleReponseMauvaise1 = request.POST['intituleReponseMauvaise1']
+		# intituleReponseMauvaise2 = request.POST['intituleReponseMauvaise2']
+		# intituleReponseMauvaise3 = request.POST['intituleReponseMauvaise3']
+		# intituleReponseMauvaise4 = request.POST['intituleReponseMauvaise4']
 
-		if form.is_valid(): # All validation rules pass
-			login(request, user)
+		# maQuestionReponse1 = Question_reponse(question_r = 23, libelle_r = intituleReponseBonne1 , reponseValide_r = True)
+		# maQuestionReponse1.save()
+		# maQuestionReponse2 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne2 , reponseValide_r = 'Choix simple')
+		# maQuestionReponse3 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne3 , reponseValide_r = 'Choix simple')
+		# maQuestionReponse4 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne4 , reponseValide_r = 'Choix simple')
+
+	#	maQuestionReponse5 = Question_reponse(question_r = monId , libelle_r = intituleReponseMauvaise1 , reponseValide_r = False)
+		# maQuestionReponse6 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise2 , reponseValide_r = 'Choix simple')
+		# maQuestionReponse7 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise3 , reponseValide_r = 'Choix simple')
+		# maQuestionReponse8 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise4 , reponseValide_r = 'Choix simple')
+		
+		# maQuestionReponse1.save()
+		# maQuestionReponse5.save()
 			# Redirect to a success page.
-			return render(request, 'appli/accueil.html')
-		else:
+		return render(request, 'appli/essai.html' , {'enseignant_q' : username_q , 'libelle_q' : libelle_q , 'temps_q' : temps_q , 'typeReponse_q' :'Choix simple' })
+		# else:
 			# Return a 'disabled account' error message
-			return render(request, 'appli/connexion.html')
+			# return render(request, 'appli/formQuestion.html', {'enseignant_q' : username , 'libelle_q' : libelle_q , 'temps_q' : temps , 'typeReponse_q' :'Choix simple' })
+			
 	else:
 		form = AjoutQuestion() # An unbound form
 		return render(request, 'appli/formQuestion.html', {
-			'form': form,
+			'form': form, 
 			})
 
-
-def home(request,name=None):
-	if (name):
-		return HttpResponse("test hello world !!!! %s" % name)
-	else:
-		return HttpResponse("Hello World")
 
 
 def accueil(request):

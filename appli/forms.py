@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-
 from django import forms
 
 class Connexion(forms.Form):
-	username = forms.CharField(max_length=100)
-	password = forms.CharField(widget=forms.PasswordInput)
-
+	
+	username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Login', 'class':'input-small'}))
+	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class':'input-small'}))
+	
 
 class AjoutQuestion(forms.Form):
 
@@ -15,13 +15,14 @@ class AjoutQuestion(forms.Form):
 		('Choix alphanumerique', 'Choix alphanumerique')
 	)
 
-	intituleQuestion = forms.CharField(max_length=100)
+	intituleQuestion = forms.CharField(widget = forms.Textarea(attrs = {'rows' : '2' }))
 	temps = forms.IntegerField()
-	typeReponse = forms.MultipleChoiceField(widget=forms.Select, choices=TYPEREP_CHOICES)
+#	typeReponse = forms.MultipleChoiceField(widget=forms.Select, choices=TYPEREP_CHOICES)
 
-	intituleReponse = forms.CharField(max_length = 100)
-	reponseValide_oui = forms.BooleanField()
-	reponseValide_non = forms.BooleanField()
+	intituleReponseBonne1 = forms.CharField(max_length = 100)
+	intituleReponseMauvaise1 = forms.CharField(max_length = 100)
 
-	#intituleReponse_non = forms.CharField(max_length = 100)
-	#reponseValide_non = forms.BooleanField(default=True)
+	# reponseValide = forms.ChoiceField(widget = forms.Select, choices=CHOICES)
+
+	# intituleReponse_non = forms.CharField(max_length = 100)
+	# reponseValide_non = forms.BooleanField(default=True)
