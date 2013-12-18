@@ -41,21 +41,19 @@ def connexion(request):
 				'form': form,'error': error
 				})
 	else:
-
+		#Lorsque l'on click sur deconnexion, aucune methode post n'est passé
+		#Donc ensuite, on test si il existe un utilisateur ou non 
+		#Si un utilise existe, on le deconnecte 
+		#Puis on renvoi sur la page de connection 
 		if request.user is not None:
-
 			logout(request)
-			form = Connexion() # An unbound form
-			return render(request, 'appli/connexion.html', {
-				'form': form,
-				})
-			
 
-		else:
-			form = Connexion() # An unbound form
-			return render(request, 'appli/connexion.html', {
-				'form': form,
-				})
+	form = Connexion() # An unbound form
+	return render(request, 'appli/connexion.html', {
+		'form': form,
+		})
+
+			
 
 
 		#if form.is_valid(): # All validation rules pass
@@ -63,13 +61,6 @@ def connexion(request):
 		#	return HttpResponse("Connexion ok")
 		#else:
 			#Return a 'disabled account' error message 
-
-def deconnexion(request):
-	logout(request)
-	form = Connexion() # An unbound form
-	return render(request, 'appli/connexion.html', {
-					'form': form
-					})
 
 def new_question(request):
 	if request.method == 'POST' : # If the form has been submitted...
