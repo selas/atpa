@@ -70,19 +70,41 @@ def deconnexion(request):
 	logout(request)
 	return redirect('connexion')
 
-#def affichageQuestion(request, question_id):
-#	#if request.method == 'GET' :
-#
-#		maQuestion = Question.objects.get(pk=question_id)
-#
-#		question = maQuestion.libelle_q
-#		temps = maQuestion.temps_q
-#
-#		maReponse = Question_reponse.objects.filter(question_r=maQuestion)
-#
-#		return render(request, 'appli/accueil.html', {
-#			'question': question, 'temps': temps, 'maReponse': maReponse
-#			})
+def affichageQuestion(request, question_id=None):
+	#if request.method == 'GET' :
+	if question_id:
+		
+		maQuestion = Question.objects.get(pk=question_id)
+		print(maQuestion)
+		question = maQuestion.libelle_q
+		print(question)
+
+		temps = maQuestion.temps_q
+		print(temps)
+
+		maReponse = Question_reponse.objects.filter(question_r=maQuestion)
+		print (maReponse)
+
+		question_list = Question.objects.all()
+		return render(request, 'appli/accueil.html', {
+			'question': question, 'temps': temps, 'maReponse': maReponse, 'question_list' : question_list
+			})
+
+		
+
+	else:
+
+		print('sdfghgtcdjhgjtfrjcxjtrxcjcxjtrcxfcxhgfdfg')
+
+
+		question = 'pas question'
+		temps = 'pas temps'
+		maReponse = 'pas reponse'
+
+		return render(request, 'appli/accueil.html', {
+			'question': question, 'temps': temps, 'maReponse': maReponse
+			})
+
 	
 
 def new_question(request):

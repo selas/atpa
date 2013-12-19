@@ -1,17 +1,6 @@
 window.onload=function () {
- 
-  
-  
   
 }
-
-function affichageQuestion(){
-	
-	$("#newQuestion").hide();
-	$("#afficherQuestion").show();
-
-}
-
 
 /*function rangeSe()
 {
@@ -24,12 +13,6 @@ function affichageQuestion(){
 
 
 document.ready=function () {
-
-	//Pour cacher par defaut la section qui contient l'affichage des questions
-	//$("#afficherQuestion").hide();
-    
-
-
 
     // On cache les sous-menus :
     $(".navigation ul.subMenu").hide();

@@ -12,13 +12,14 @@
 		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
 	</head>
+
 	<body>
 		<header>
 			<section class="page-header well text-center">
 				<span>Bienvenue {{user.username}}</span>
 				<span class="deconnexion">
 					<a href="../deconnexion" class="btn btn-danger btn-mini" title="Déconnexion">
-							Déconnexion <i class="icon-white icon-off"></i>
+						Déconnexion <i class="icon-white icon-off"></i>
 					</a>
 				</span>
 			</section>
@@ -27,22 +28,28 @@
 		<section class="container-fluid">
 			<section class="span6 text-center">
 
-				<section id="newQuestion">
-					<a href="../new_question" class="btn btn-primary btn-large" title="Cliquer ici pour créer une nouvelle question">Créer une nouvelle question</a>
-				</section>
+				{% if question %}
 
-				<section id="afficherQuestion">
-					
-					<p>{{ formAfficheQuestion.question }}</p>
-					<p>{{ formAfficheQuestion.temps }}</p>
-					<p>
-						{% for reponse in reponse_list %}
-										{{ reponse.libelle_r }} 
-						{% endfor %}
-					</p>
+					<section id="afficherQuestion">
+						<h1>{{ question }}</h1>
+						<p>Temps pour répondre : {{ temps }} secondes</p>
+						<p>Réponses possibles :
+							{% for reponse in maReponse %}
+								<li>{{ reponse }}
+							{% endfor %}
+						</p>
 
-				</section>
-				
+						<button type="submit" class="btn btn-primary">Charger la question</button>
+					</section>
+
+				{% else %}
+
+					<section id="newQuestion">
+						<a href="../new_question" class="btn btn-primary btn-large" title="Cliquer ici pour créer une nouvelle question">Créer une nouvelle question</a>
+					</section>
+
+				{% endif %}
+
 			</section>
 				
 			<aside class="span4 offset2">
@@ -61,17 +68,14 @@
 						<h2>Questions : </h2>
 							<ul id="listeQuestion" class="text-center">
 								{% for question in question_list %}
-									<li><a href="#" title="cliquer ici pour accéder à la question" onClick="affichageQuestion()">
+									<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
 									{{ question.libelle_q }} </a> 
 									
 								{% endfor %}	
 							</ul>
 					</section>
-					
 				</section>
 			</aside>
-
 		</section>
 	</body>
-
 </html>

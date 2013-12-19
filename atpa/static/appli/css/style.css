@@ -1,4 +1,4 @@
-#newQestion{
+#newQuestion{
 	margin-top:30%;
 }
 
@@ -8,6 +8,7 @@ header{
 	-o-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
+	margin-top:-20px;
 }
 
 .deconnexion{
@@ -49,10 +50,15 @@ header{
 #listeQuestion{
 	font-size:auto;	
 	overflow-y:scroll;
-	max-height: 250px;
-	margin-right:-19px;
+	max-height: 320px;
+	margin-right:-10px;
 	list-style: none;
 	text-align:left;
+}
+
+#afficherQuestion{
+	list-style: none;
+	margin-top:30%;
 }
 
 #question{
@@ -76,12 +82,3 @@ header{
 h2{
 	font-size: 20px;	
 }
-
-
-
-
-
-
-
-
-

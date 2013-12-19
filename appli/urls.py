@@ -8,7 +8,7 @@ urlpatterns = patterns('',
 	#url(r'^home/$', 'appli.views.home', name='home'),
 	#url(r'^home/(\w+)?$', 'appli.views.home', name='home_name'), 
 	url(r'^accueil/$', 'appli.views.accueil', name='accueil'),
-	#url(r'^accueil/(\w{2})?/$', 'appli.views.affichageQuestion', name='affichageQuestion'),
+	url(r'^accueil/(?P<question_id>\w{1,4})/$', 'appli.views.affichageQuestion', name='affichageQuestion'),
 	#url(r'^form_question/$', 'appli.views.form_question', name='form_question'),
 
 	url(r'^connexion/$', 'appli.views.connexion', name='connexion'),
