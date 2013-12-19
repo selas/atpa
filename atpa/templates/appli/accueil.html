@@ -3,26 +3,22 @@
 	<head>
 		<title>Accueil Enseignant</title>
 		<meta CHARSET="utf-8" />
-		
 		<!-- Librairire bootstrap-->
 		{% load staticfiles %}
-		<!--<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.css" %}' media="screen"/>-->
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
-		
 		<!--Autres-->
 		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
 		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
 	</head>
-
-
 	<body>
 		<header>
 			<section class="page-header well text-center">
 				<span>Bienvenue {{user.username}}</span>
 				<span class="deconnexion">
-					<a href="../deconnexion" >
-						<button class="btn btn-danger btn-mini">Déconnexion <i class="icon-white icon-off"></i></button>
+					<a href="../deconnexion" class="btn btn-danger btn-mini" title="Déconnexion">
+							Déconnexion <i class="icon-white icon-off"></i>
 					</a>
 				</span>
 			</section>
@@ -31,18 +27,21 @@
 		<section class="container-fluid">
 			<section class="span6 text-center">
 
-				<section id="newQestion">
+				<section id="newQuestion">
 					<a href="../new_question" class="btn btn-primary btn-large" title="Cliquer ici pour créer une nouvelle question">Créer une nouvelle question</a>
 				</section>
-				
-				<!--<section id="sectionQuestionEnseignant">
-					<h4 id="questionEnseignant">Question</h4><br />
-					<section id="zone_rep">
-						
-					</section>
+
+				<section id="afficherQuestion">
 					
-					<input type="button" class="btn btn-large" title="Cliquer ici pour valider votre question" value="Soumettre" onclick="">
-				</section>-->
+					<p>{{ formAfficheQuestion.question }}</p>
+					<p>{{ formAfficheQuestion.temps }}</p>
+					<p>
+						{% for reponse in reponse_list %}
+										{{ reponse.libelle_r }} 
+						{% endfor %}
+					</p>
+
+				</section>
 				
 			</section>
 				
@@ -62,8 +61,9 @@
 						<h2>Questions : </h2>
 							<ul id="listeQuestion" class="text-center">
 								{% for question in question_list %}
-									<li><a href="#" title="cliquer ici pour accéder à la question">
+									<li><a href="#" title="cliquer ici pour accéder à la question" onClick="affichageQuestion()">
 									{{ question.libelle_q }} </a> 
+									
 								{% endfor %}	
 							</ul>
 					</section>

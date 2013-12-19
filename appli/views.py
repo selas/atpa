@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response, render, redirect
 from appli.models import Question, Question_reponse
-from appli.forms import Connexion, AjoutQuestion
+from appli.forms import Connexion, AjoutQuestion#, AfficheQuestion
 from django.views.decorators.csrf import csrf_protect
 #from django.contrib.auth.models import User
 
@@ -53,15 +53,40 @@ def connexion(request):
 			'form': form,
 			})
 
+
+
+def accueil(request):
+
+	if request.user.is_authenticated():
+		question_list = Question.objects.all()
+		return render(request, 'appli/accueil.html' , { 'question_list' : question_list })
+
+	else:
+		return redirect('connexion')
+
+
 def deconnexion(request):
 
 	logout(request)
 	return redirect('connexion')
 
+#def affichageQuestion(request, question_id):
+#	#if request.method == 'GET' :
+#
+#		maQuestion = Question.objects.get(pk=question_id)
+#
+#		question = maQuestion.libelle_q
+#		temps = maQuestion.temps_q
+#
+#		maReponse = Question_reponse.objects.filter(question_r=maQuestion)
+#
+#		return render(request, 'appli/accueil.html', {
+#			'question': question, 'temps': temps, 'maReponse': maReponse
+#			})
+	
 
 def new_question(request):
 	if request.method == 'POST' : # If the form has been submitted...
-		print("foo")
 		libelle_q = request.POST['intituleQuestion']
 		username_q = request.user
 		
@@ -110,28 +135,17 @@ def new_question(request):
 
 
 
-def accueil(request):
-
-	if request.user.is_authenticated():
-		question_list = Question.objects.all()
-		return render(request, 'appli/accueil.html' , { 'question_list' : question_list })
-
-	else:
-		return redirect('connexion')
-
-
-
-def choixquestion_view(request):
-	if request.method=='POST':
-		form = ChoixQuestion(request.POST)
-		if form.is_valid:
-			question = form.cleaned_data.get('question')
-			#fecrire du code pour savoir ce que l on va faire
-	else:
-		form = ChoixQuestion
-	return render(request,'appli/ajout.html',
-			{'form':form})
-			#context_instance = RequestContext(request) )
+#def choixquestion_view(request):
+#	if request.method=='POST':
+#		form = ChoixQuestion(request.POST)
+#		if form.is_valid:
+#			question = form.cleaned_data.get('question')
+#			#fecrire du code pour savoir ce que l on va faire
+#	else:
+#		form = ChoixQuestion
+#	return render(request,'appli/ajout.html',
+#			{'form':form})
+#			#context_instance = RequestContext(request) )
 
 
 def form_question(request):

@@ -20,7 +20,7 @@ class Question(models.Model):
 
 	def __unicode__(self):
 		return self.libelle_q
-
+		
 
 class Question_reponse(models.Model):
 	question_r = models.ForeignKey(Question)
