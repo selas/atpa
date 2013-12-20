@@ -3,9 +3,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response, render, redirect
-from appli.models import Question, Question_reponse
+from appli.models import Question, Question_reponse, Question_posee
 from appli.forms import Connexion, AjoutQuestion#, AfficheQuestion
 from django.views.decorators.csrf import csrf_protect
+from datetime import datetime 
+
 #from django.contrib.auth.models import User
 
 
@@ -50,8 +52,8 @@ def accueil(request):
 
 	if request.user.is_authenticated():
 
-		question_list = Question.objects.filter(enseignant_q=request.user)
-		return render(request, 'appli/accueil.html' , { 'question_list' : question_list })
+			question_list = Question.objects.filter(enseignant_q=request.user)
+			return render(request, 'appli/accueil.html' , { 'question_list' : question_list })
 
 	else:
 		return redirect('connexion')
@@ -66,7 +68,7 @@ def deconnexion(request):
 def affichageQuestion(request, question_id=None):
 
 	if question_id:
-		
+
 		maQuestion = Question.objects.get(pk=question_id)
 		
 		question = maQuestion.libelle_q
@@ -77,8 +79,9 @@ def affichageQuestion(request, question_id=None):
 		
 		question_list = Question.objects.filter(enseignant_q=request.user)
 
-		return render(request, 'appli/accueil.html', {
-			'question': question, 'temps': temps, 'maReponse': maReponse, 'question_list' : question_list
+		return render(request, 'appli/accueil.html', { 
+			'question_id': question_id, 'question': question, 'temps': temps,
+			 'maReponse': maReponse, 'question_list' : question_list
 			})
 		
 	else:
@@ -153,7 +156,32 @@ def new_question(request):
 #			#context_instance = RequestContext(request) )
 
 
-def form_question(request):
-	return render_to_response('appli/formQuestion.html')
+
+def question_posee(request, question_posee_id):
+	if request.method == 'POST' : 
+		
+		maQuestion = Question.objects.get(pk=question_posee_id)
+		maQuestion_posee = Question_posee(question_qa=maQuestion, dureeActivite_qa=maQuestion.temps_q)
+		maQuestion_posee.save()
+		return redirect("question_en_ligne")
 
 
+def question_en_ligne(request):
+	#if request.method == 'POST' : 
+
+	if request.user.is_authenticated():
+
+		connecte = request.user
+		return render(request, 'appli/enseignant_question.html', {'connecte':connecte})
+
+	else:
+		connecte = None
+		question_posee = None # A modifier la prochaine fois
+		return render(request, 'appli/enseignant_question.html', {'connecte':connecte, 'question_posee':question_posee)
+
+		
+
+
+		
+		
+	

@@ -32,15 +32,18 @@
 				{% if question %}
 
 					<section id="afficherQuestion">
-						<h1>{{ question }}</h1>
-						<p>Temps pour répondre : {{ temps }} secondes</p>
-						<p>Réponses possibles :
-							{% for reponse in maReponse %}
-								<li>{{ reponse }}
-							{% endfor %}
-						</p>
+						<form method="POST" action="/appli/question/{{ question_id }}/">{% csrf_token %}
 
-						<button type="submit" class="btn btn-primary">Charger la question</button>
+							<h1>{{ question }}</h1>
+							<p>Temps pour répondre : {{ temps }} secondes</p>
+							<p>Réponses possibles :
+								{% for reponse in maReponse %}{{ question.id }}
+									<li>{{ reponse }}
+								{% endfor %}
+							</p>
+
+							<button type="submit" class="btn btn-primary">Charger la question</button>
+						</form>
 					</section>
 
 				{% else %}

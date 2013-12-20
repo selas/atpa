@@ -1,22 +1,18 @@
-window.onload=function () {
-  
-}
+/*Variables globale*/
+var seconde = 30;//secondes utiliser pour le compteur
+var minute = 0;//minutes utiliser pour le compteur
+var timer = setInterval('decompte()',1000);//lancement du compte à rebourg
+var counter = 0;//compteur de zones de saisies réponses Fausses
+var counter1 = 0;//compteur de zones de saisies réponses Vraies
+/*--------------------------------------------------*/
 
-/*function rangeSe()
-{
-	$('rangeSeconde').oninput = function() 
-	{
-		$('rangeid').innerHTML = this.value; 
-	};
-	$('rangeSeconde').oninput();
-}*/
-
-
+/* fonction qui s'execute quand la page web est prête*/
 document.ready=function () {
 
     // On cache les sous-menus :
     $(".navigation ul.subMenu").hide();
 
+	
     // On sélectionne tous les items de liste portant la classe "toggleSubMenu"
     // et on remplace l'élément span qu'ils contiennent par un lien :
     $(".navigation li.toggleSubMenu span").each( function () {
@@ -37,225 +33,186 @@ document.ready=function () {
         }
         // On empêche le navigateur de suivre le lien :
         return false;
-        
-        activebtn();
-        
     });    
-
+	//on ré-active les boutons réponses
+    activebtn(); 
 }
 
-function affrRO(){
-	$("#AffRepFermee").hide();
-	$("#AffRepSaisie").hide();
-	$("#AffRepOuverte").show();
-	document.getElementById("stylebtn").innerHTML = "<section class=\"alert-info span3\">Question à choix multiple</section><br /><br />";
-	$(".navigation ul.subMenu").hide();
-}
-    
-function affrRF(){
-	$("#AffRepOuverte").hide();
-	$("#AffRepSaisie").hide();
-	$("#AffRepFermee").show();
-	document.getElementById("stylebtn").innerHTML = "<section class=\"alert-info span2\">Question Fermée</section><br /><br />";
-	$(".navigation ul.subMenu").hide();
-}  
-   
-function affrRZS(){
-	$("#AffRepFermee").hide();
-    $("#AffRepOuverte").hide();
-    $("#AffRepSaisie").show();
-    document.getElementById("stylebtn").innerHTML = "<section class=\"alert-info span3\">Question avec saisie réponse</section><br /><br />";
-    $(".navigation ul.subMenu").hide();
-}
-
+/* Permet de cacher certains éléments*/
 function cache(){
-  $("#AffRepFermee").hide();
-  $("#AffRepOuverte").hide();
-  $("#AffRepSaisie").hide();
   $("#question").hide();
-
+  $("#repFausse1").hide();$("#repFausse2").hide();$("#repFausse3").hide();
+  $("#repVrai1").hide();$("#repVrai2").hide();$("#repVrai3").hide();
   document.getElementById("stylebtn").innerHTML = "";
+  document.getElementById('btnAjoutRepF').disabled= false;
+  document.getElementById('btnAjoutRepV').disabled= false;
 }
 
-function conversion()
-{
-	var seconde=0;// ajouter un get element by id
-	var minute=0;// ajouter un get element by id
-	var heure=0;// ajouter un get element by id
-	
-	if (minute>0)
-	{
-		seconde += (minute*60);
-	}
-	if (heure>0)
-	{
-		seconde += (heure*3600);
-	}
-}
-
-var seconde = 30;
-var minute = 0;
-
+/* Compte à rebourg */
 function decompte()
 {
+	//ajout d'un "s" à seconde quand il y a plus d'une seconde
 	if(seconde <= 1) {
 	var pluriel = "";
 	} else {
 	pluriel = "s";
 	}
-				
+	
+	//ajout d'un "s" à minute quand il y a plus d'une minute			
 	if(minute <= 1) {
 	var pluriel2 = "";
 	} else {
 	pluriel2 = "s";
 	}
-				
+	
+	// retranche une minute toutes les 60 secondes			
 	if (seconde > 59){	
 		minute = parseInt(seconde/60);
 		var seconde2 = seconde % 60;
 	}
 	else{
-			seconde2=seconde;
-			minute=0;
-		}
-	$("#compt2").html(minute +" minute"+pluriel2 +" "+ seconde2 + " seconde" + pluriel);
-	$("#compt2").css("font-size","x-large");
-	//$("#compt").html(seconde + " seconde" + pluriel);
-	//$("#compt").css("font-size","x-large");
-	
-	if(seconde <= 10 || seconde < 0) {
-		//$("#compt").css("color","red");
-		$("#compt2").css("color","red");
+		seconde2=seconde;
+		minute=0;
 	}
 		
+	//affichage du compte à rebourg
+	$("#compt2").html("<span class='digit'>"+minute +"</span>"+" minute"+pluriel2 +" "+"<span class='digit'>" + seconde2 +"</span>"+ " seconde" + pluriel);
+	$("#compt2").css("font-size","x-large");
+	
+	// si il reste moins de 10 secondes, l'affichage devient rouge+ il y a un 0 devant les secondes (pour avoir 2 chiffres)
+	if(seconde < 10 || seconde < 0) {
+		$("#compt2").css("color","red");
+		$("#compt2").html("<span class='digit'>"+minute +"</span>"+" minute"+pluriel2 +" "+"<span class='digit'>0" + seconde2 +"</span>"+ " seconde" + pluriel);
+
+	}
+	//si il reste moins de 10 minutes, il y a un 0 devant les secondes (pour avoir 2 chiffres)
+	if(minute < 10 || minute < 0) {
+		$("#compt2").html("<span class='digit'>0"+minute +"</span>"+" minute"+pluriel2 +" "+"<span class='digit'>" + seconde2 +"</span>"+ " seconde" + pluriel);
+	}
+	//si il y a moins de 10 min et moins de 10 secondes -> 0 devant les secondes et minutes
+	if(minute < 10 && seconde < 10) {
+		$("#compt2").html("<span class='digit'>0"+minute +"</span>"+" minute"+pluriel2 +" "+"<span class='digit'>0" + seconde2 +"</span>"+ " seconde" + pluriel);
+	}
+	/*si plus de 9 secondes affichage normal*/
+	if(seconde >= 10) {
+		$("#compt2").css("color","black");
+	}
+	
+	// affiche terminé quand il n'y a plus de temps	
 	if(seconde == 0 || seconde < 0) {
 		seconde = 0;minute=0;	
 		clearInterval(timer);	
-		//$("#compt").html("Terminé");
 		$("#compt2").html("Terminé");
 		desactivebtn();
 	}			
 	seconde--;
+	return seconde;
 }
-var timer = setInterval('decompte()',1000);
 
+/* Fonction affichant/masquant la question coté étudiant (pour les personnes mal voyantes)*/
 function question(){
 	$("#question").toggle("slow");
 }
 
+/* Fonction de désactivation des réponses vrai/faux coté étudiant*/
 function desactivebtn(){
 	document.getElementById('btnEtuYes').disabled= true;
 	document.getElementById('btnEtuNo').disabled= true;	
 }
 
+/* fonction d'activation des réponses vrai/faux au chargement de la page coté étudiant*/
 function activebtn(){
 	document.getElementById('btnEtuYes').disabled= false;
 	document.getElementById('btnEtuNo').disabled= false;	
 }
 
+/* Fonction affichant/masquant la réponse*/
 function reponse(){
 	$("#reponseEns").toggle("slow");
 }
+
+/* fonction cachant la réponse au chargement de la page enseignant_question */
 function cachereponse(){
 	$("#reponseEns").hide();
 }
 
-function calculer()
-{
-	//graphique
-	var ctx = document.getElementById("graph").getContext("2d");
-	
-	
-	var data = {
-	labels : ["January","February","March","April","May","June","July"],
-	datasets : [
-		{
-			fillColor : "rgba(220,220,220,0.5)",
-			strokeColor : "rgba(220,220,220,1)",
-			data : [65,59,90,81,56,55,40]
-		},
-		{
-			fillColor : "rgba(151,187,205,0.5)",
-			strokeColor : "rgba(151,187,205,1)",
-			data : [28,48,40,19,96,27,100]
-		}
-	]
+/* Fonction stoppant le compte à rebourg*/
+function stopTime(){
+	$("#compt2").html("Terminé");
+	$("#compt2").css("color","red");	
+	seconde = 0;	
 }
 
-	var options = 
+/* fonction ajoutant des secondes au compte à rebourg*/
+function ajoutSec(){
+	//on récupère le nombre de secondes réstantes
+	var sec1 = decompte();
+	//on récupère le nombre de secondes à ajouter
+	var sec2 = document.getElementById("rangeS").value;
+	//on additionne les deux
+	var ajout = parseInt(sec1)+parseInt(sec2);
+	//on attribut la valeur additionné à la valeur seconde par défaut
+	seconde = ajout;
+}
+
+/* Ajoute une zone de saisie de réponse dans le champs Réponses Fausses */	
+function ajoutRepF(id) {
+	//ajoute 1 pour afficher la zone de texte suivante
+	counter++;
+	//affiche des zones de texte suivant le nombre d'appuit sur le bouton ajout
+	switch(counter)
 	{
-				
-	//Boolean - If we show the scale above the chart data			
-	scaleOverlay : true,
-	
-	//Boolean - If we want to override with a hard coded scale
-	scaleOverride : false,
-	
-	//** Required if scaleOverride is true **
-	//Number - The number of steps in a hard coded scale
-	scaleSteps : null,
-	//Number - The value jump in the hard coded scale
-	scaleStepWidth : null,
-	//Number - The scale starting value
-	scaleStartValue : null,
-
-	//String - Colour of the scale line	
-	scaleLineColor : "rgba(0,0,0,.1)",
-	
-	//Number - Pixel width of the scale line	
-	scaleLineWidth : 1,
-
-	//Boolean - Whether to show labels on the scale	
-	scaleShowLabels : true,
-	
-	//Interpolated JS string - can access value
-	scaleLabel : "<%=value%>",
-	
-	//String - Scale label font declaration for the scale label
-	scaleFontFamily : "'Arial'",
-	
-	//Number - Scale label font size in pixels	
-	scaleFontSize : 12,
-	
-	//String - Scale label font weight style	
-	scaleFontStyle : "normal",
-	
-	//String - Scale label font colour	
-	scaleFontColor : "#666",	
-	
-	///Boolean - Whether grid lines are shown across the chart
-	scaleShowGridLines : true,
-	
-	//String - Colour of the grid lines
-	scaleGridLineColor : "rgba(0,0,0,.05)",
-	
-	//Number - Width of the grid lines
-	scaleGridLineWidth : 1,	
-
-	//Boolean - If there is a stroke on each bar	
-	barShowStroke : true,
-	
-	//Number - Pixel width of the bar stroke	
-	barStrokeWidth : 2,
-	
-	//Number - Spacing between each of the X value sets
-	barValueSpacing : 4,
-	
-	//Number - Spacing between data sets within X values
-	barDatasetSpacing : 1,
-	
-	//Boolean - Whether to animate the chart
-	animation : true,
-
-	//Number - Number of animation steps
-	animationSteps : 60,
-	
-	//String - Animation easing effect
-	animationEasing : "easeOutQuart",
-
-	//Function - Fires when the animation is complete
-	onAnimationComplete : null
-	
+		case 1:
+		$("#repFausse1").show();
+		break;
+		case 2:
+		$("#repFausse2").show();
+		break;
+		case 3:
+		$("#repFausse3").show();
+		$("#btnAjoutRepF").hide();
+		break;
+		default:
+		exit();
 	}
-	var myNewChart = new Chart(ctx).Bar(data,options);
+	var temp =0;
+	//ajout des compteurs de réponses vraies et fausses plus les des zones du début
+	temp = counter + counter1;
+	temp +=2;
+	//on ne peut pas avoir plus de 4 zones de saisies de réponses
+	if (temp>=4){
+			document.getElementById('btnAjoutRepF').disabled= true;
+			document.getElementById('btnAjoutRepV').disabled= true;	
+			$("#btnAjoutRepF").hide();
+			$("#btnAjoutRepV").hide();
+	}
+}
+	
+/* Ajoute une zone de saisie de réponse dans le champs Réponses Vraies */
+function ajoutRepV(id){
+	counter1++;
+	switch(counter1)
+	{
+		case 1:
+		$("#repVrai1").show();
+		break;
+		case 2:
+		$("#repVrai2").show();
+		break;
+		case 3:
+		$("#repVrai3").show();
+		$("#btnAjoutRepV").hide();
+		break;
+		default:
+		exit();
+	}
+	var temp =0;
+	temp = counter + counter1;
+	temp +=2;
+	if (temp>=4){
+			document.getElementById('btnAjoutRepF').disabled= true;
+			document.getElementById('btnAjoutRepV').disabled= true;
+			$("#btnAjoutRepF").hide();
+			$("#btnAjoutRepV").hide();	
+	}
 }
