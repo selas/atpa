@@ -15,32 +15,24 @@ def connexion(request):
 		username = request.POST['username']
 		password = request.POST['password']
 		user = authenticate(username=username, password=password)
-		form = Connexion(request.POST) # A form bound to the POST data
+		#form = Connexion(request.POST) # A form bound to the POST data
 
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-				form = Connexion() # An unbound form
 				# Redirect to a success page.
 
-				question_list = Question.objects.all()
 				return redirect("accueil") 
-				#render(request, 'appli/accueil.html' , { 'question_list' : question_list })
 
 			else:
 				# Return a 'disabled account' error message
-				error = "Compte desactivé"
+
 				return redirect(".")
-				#render(request, 'appli/connexion.html', {
-				#	'form': form,'error': error
-				#	})
+
 		else:
 			# Return an 'invalid login' error message.
-			error = "login ou mot de passe invalid"
+
 			return redirect('.')
-			#render(request, 'appli/connexion.html', {
-			#	'form': form,'error': error
-			#	})
 
 	else:
 		#Lorsque l'on click sur deconnexion, aucune methode post n'est passé
@@ -54,11 +46,11 @@ def connexion(request):
 			})
 
 
-
 def accueil(request):
 
 	if request.user.is_authenticated():
-		question_list = Question.objects.all()
+
+		question_list = Question.objects.filter(enseignant_q=request.user)
 		return render(request, 'appli/accueil.html' , { 'question_list' : question_list })
 
 	else:
@@ -70,42 +62,37 @@ def deconnexion(request):
 	logout(request)
 	return redirect('connexion')
 
+
 def affichageQuestion(request, question_id=None):
-	#if request.method == 'GET' :
+
 	if question_id:
 		
 		maQuestion = Question.objects.get(pk=question_id)
-		print(maQuestion)
+		
 		question = maQuestion.libelle_q
-		print(question)
-
+		
 		temps = maQuestion.temps_q
-		print(temps)
-
+		
 		maReponse = Question_reponse.objects.filter(question_r=maQuestion)
-		print (maReponse)
+		
+		question_list = Question.objects.filter(enseignant_q=request.user)
 
-		question_list = Question.objects.all()
 		return render(request, 'appli/accueil.html', {
 			'question': question, 'temps': temps, 'maReponse': maReponse, 'question_list' : question_list
 			})
-
 		
-
 	else:
-
-		print('sdfghgtcdjhgjtfrjcxjtrxcjcxjtrcxfcxhgfdfg')
-
 
 		question = 'pas question'
 		temps = 'pas temps'
 		maReponse = 'pas reponse'
+		question_list = Question.objects.filter(enseignant_q=request.user)
+
 
 		return render(request, 'appli/accueil.html', {
-			'question': question, 'temps': temps, 'maReponse': maReponse
+			'question': question, 'temps': temps, 'maReponse': maReponse, 'question_list' : question_list
 			})
 
-	
 
 def new_question(request):
 	if request.method == 'POST' : # If the form has been submitted...
@@ -143,18 +130,14 @@ def new_question(request):
 		maQuestionReponse1.save()
 		maQuestionReponse5.save()
 			# Redirect to a success page.
-		question_list = Question.objects.all()
+		question_list = Question.objects.filter(enseignant_q=request.user)
 		return render(request, 'appli/accueil.html' , {'question_list' : question_list, 'enseignant_q' : username_q , 'libelle_q' : libelle_q , 'temps_q' : temps_q , 'typeReponse_q' :'Choix simple' })
-		# else:
-			# Return a 'disabled account' error message
-			# return render(request, 'appli/formQuestion.html', {'enseignant_q' : username , 'libelle_q' : libelle_q , 'temps_q' : temps , 'typeReponse_q' :'Choix simple' })
-			
+		
 	else:
 		form = AjoutQuestion() # An unbound form
 		return render(request, 'appli/formQuestion.html', {
 			'form': form, 
 			})
-
 
 
 #def choixquestion_view(request):
@@ -173,7 +156,4 @@ def new_question(request):
 def form_question(request):
 	return render_to_response('appli/formQuestion.html')
 
-
-#def error(request):
-#	 return render('appli/connexionEnseigant.html')
 
