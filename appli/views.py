@@ -3,7 +3,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response, render, redirect
-from appli.models import Question, Question_reponse, Question_posee
+from appli.models import Question, Reponse, Question_ligne
 from appli.forms import Connexion, AjoutQuestion#, AfficheQuestion
 from django.views.decorators.csrf import csrf_protect
 from datetime import datetime 
@@ -52,7 +52,7 @@ def accueil(request):
 
 	if request.user.is_authenticated():
 
-			question_list = Question.objects.filter(enseignant_q=request.user)
+			question_list = Question.objects.filter(enseignant=request.user)
 			return render(request, 'appli/accueil.html' , { 'question_list' : question_list })
 
 	else:
@@ -71,13 +71,13 @@ def affichageQuestion(request, question_id=None):
 
 		maQuestion = Question.objects.get(pk=question_id)
 		
-		question = maQuestion.libelle_q
+		question = maQuestion.libelle
 		
-		temps = maQuestion.temps_q
+		temps = maQuestion.temps
 		
-		maReponse = Question_reponse.objects.filter(question_r=maQuestion)
+		maReponse = Reponse.objects.filter(question=maQuestion)
 		
-		question_list = Question.objects.filter(enseignant_q=request.user)
+		question_list = Question.objects.filter(enseignant=request.user)
 
 		return render(request, 'appli/accueil.html', { 
 			'question_id': question_id, 'question': question, 'temps': temps,
@@ -89,7 +89,7 @@ def affichageQuestion(request, question_id=None):
 		question = 'pas question'
 		temps = 'pas temps'
 		maReponse = 'pas reponse'
-		question_list = Question.objects.filter(enseignant_q=request.user)
+		question_list = Question.objects.filter(enseignant=request.user)
 
 
 		return render(request, 'appli/accueil.html', {
@@ -99,14 +99,14 @@ def affichageQuestion(request, question_id=None):
 
 def new_question(request):
 	if request.method == 'POST' : # If the form has been submitted...
-		libelle_q = request.POST['intituleQuestion']
-		username_q = request.user
+		libelle = request.POST['intituleQuestion']
+		username = request.user
 		
-		temps_q = request.POST['temps'] # A form bound to the POST data
-#		typeReponse_q = request.POST['typeReponse']
+		temps = request.POST['temps'] # A form bound to the POST data
+#		typeReponse = request.POST['typeReponse']
 
 		# form = AjoutQuestion(request.POST)
-		maQuestion=Question(enseignant_q = username_q , libelle_q = libelle_q , temps_q = temps_q , typeReponse_q = 'Choix simple')
+		maQuestion=Question(enseignant = username , libelle = libelle , temps = temps , typeReponse = 'Choix simple')
 		maQuestion.save()
 		idQuestion = maQuestion.id
 		monObjetQuestion = Question.objects.get(pk=idQuestion)
@@ -119,13 +119,13 @@ def new_question(request):
 		# intituleReponseMauvaise2 = request.POST['intituleReponseMauvaise2']
 		# intituleReponseMauvaise3 = request.POST['intituleReponseMauvaise3']
 		# intituleReponseMauvaise4 = request.POST['intituleReponseMauvaise4']
-		maQuestionReponse1 = Question_reponse(question_r = monObjetQuestion, libelle_r = intituleReponseBonne1 , reponseValide_r = True)
+		maQuestionReponse1 = Question_reponse(question = monObjetQuestion, libelle = intituleReponseBonne1 , reponseValide = True)
 		# maQuestionReponse1.save()
 		# maQuestionReponse2 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne2 , reponseValide_r = 'Choix simple')
 		# maQuestionReponse3 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne3 , reponseValide_r = 'Choix simple')
 		# maQuestionReponse4 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne4 , reponseValide_r = 'Choix simple')
 
-		maQuestionReponse5 = Question_reponse(question_r = monObjetQuestion , libelle_r = intituleReponseMauvaise1 , reponseValide_r = False)
+		maQuestionReponse5 = Question_reponse(question = monObjetQuestion , libelle = intituleReponseMauvaise1 , reponseValide = False)
 		# maQuestionReponse6 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise2 , reponseValide_r = 'Choix simple')
 		# maQuestionReponse7 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise3 , reponseValide_r = 'Choix simple')
 		# maQuestionReponse8 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise4 , reponseValide_r = 'Choix simple')
@@ -133,8 +133,8 @@ def new_question(request):
 		maQuestionReponse1.save()
 		maQuestionReponse5.save()
 			# Redirect to a success page.
-		question_list = Question.objects.filter(enseignant_q=request.user)
-		return render(request, 'appli/accueil.html' , {'question_list' : question_list, 'enseignant_q' : username_q , 'libelle_q' : libelle_q , 'temps_q' : temps_q , 'typeReponse_q' :'Choix simple' })
+		question_list = Question.objects.filter(enseignant=request.user)
+		return render(request, 'appli/accueil.html' , {'question_list' : question_list, 'enseignant' : username , 'libelle' : libelle , 'temps' : temps , 'typeReponse' :'Choix simple' })
 		
 	else:
 		form = AjoutQuestion() # An unbound form
@@ -161,7 +161,7 @@ def question_posee(request, question_posee_id):
 	if request.method == 'POST' : 
 		
 		maQuestion = Question.objects.get(pk=question_posee_id)
-		maQuestion_posee = Question_posee(question_qa=maQuestion, dureeActivite_qa=maQuestion.temps_q)
+		maQuestion_posee = Question_ligne(question=maQuestion, dureeActivite=maQuestion.temps)
 		maQuestion_posee.save()
 		return redirect("question_en_ligne")
 
@@ -177,7 +177,7 @@ def question_en_ligne(request):
 	else:
 		connecte = None
 		question_posee = None # A modifier la prochaine fois
-		return render(request, 'appli/enseignant_question.html', {'connecte':connecte, 'question_posee':question_posee)
+		return render(request, 'appli/enseignant_question.html', {'connecte':connecte, 'question_posee':question_posee})
 
 		
 

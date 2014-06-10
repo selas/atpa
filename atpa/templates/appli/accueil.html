@@ -37,9 +37,11 @@
 							<h1>{{ question }}</h1>
 							<p>Temps pour répondre : {{ temps }} secondes</p>
 							<p>Réponses possibles :
-								{% for reponse in maReponse %}{{ question.id }}
-									<li>{{ reponse }}
-								{% endfor %}
+								<ul>
+									{% for reponse in maReponse %}{{ question.id }}
+										<li>{{ reponse }}</li>
+									{% endfor %}
+								</ul>
 							</p>
 
 							<button type="submit" class="btn btn-primary">Charger la question</button>
@@ -73,7 +75,7 @@
 							<ul id="listeQuestion" class="text-center">
 								{% for question in question_list %}
 									<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
-									{{ question.libelle_q }} </a> 
+									{{ question.libelle }} </a> </li>
 									
 								{% endfor %}	
 							</ul>

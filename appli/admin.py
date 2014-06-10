@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from appli.models import Question, Question_reponse, Question_posee, Reponse_saisie
+from appli.models import Question, Reponse, Question_ligne, Reponse_ligne
 
 admin.site.register(Question)
-admin.site.register(Question_reponse)
-admin.site.register(Question_posee)
-admin.site.register(Reponse_saisie)
+admin.site.register(Reponse)
+admin.site.register(Question_ligne)
+admin.site.register(Reponse_ligne)
 
 
 
