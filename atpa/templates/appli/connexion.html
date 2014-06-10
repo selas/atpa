@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Accueil ATPA</title>
+		<meta CHARSET="utf-8" />
+
+		<!-- Librairire bootstrap-->
+		{% load staticfiles %}
+		<!--<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.css" %}' media="screen"/>-->
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
+		
+		<!--Autres-->
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
+		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
+		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+	</head>
+
+	<body>
+		<section class="container-fluid">
+			<header id="coverHead" class="page-header">
+				<section class="text-right">
+					<ul class="navigation unstyled">
+						<li class="toggleSubMenu btn btn-mini" title="Cliquer ici pour vous connecter  en tant qu'enseignant"><span> Enseignants</span>
+						<ul class="subMenu unstyled">
+							<li>    
+								<section class="span3">
+									<form class="form-inline" id="formconnexion" method="POST">
+										{% csrf_token %}
+													
+										{{ form.username }}
+										<!--ajouter equivalent du placeholder-->
+
+										{{ form.password }}
+										<!--ajouter equivalent du placeholder-->
+													
+		
+										<button type="submit" title="Cliquer ici pour vous connecter" class="btn btn-primary btn-small pull-right"><i class="icon-user icon-white"></i>Se connecter</button>
+									</form>
+								</section>
+							</li>
+						</ul>
+						</li>
+					</ul>
+				</section>
+				<h1  class="text-center" id="atpa">ATPA</h1>															
+			</header>
+		</section>
+			
+			<section id="coEtu" class="text-center">	
+					<a class="btn btn-primary text-center" href="../question_en_ligne" title="Cliquer ici pour commencer">
+						<h2>Commencer</h2></a>
+			</section>	
+			<hr />
+			
+		<section class="container-fluid">
+			
+			
+			<p class="text-center lead">Utiliser vos équipements personnels
+			 (téléphone, ordinateur portable, tablette électronique) pour répondre aux questions posées.</p>
+			 <p class="text-center lead">Pour cela rien de plus simple! Il suffit de cliquer sur Rejoindre en haut à droite et de répondre aux 
+			 questions posées dans le temps imparti</p>
+							
+    						
+		</section>
+	</body>
+
+</html>
+

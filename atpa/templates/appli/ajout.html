@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ajout d'une question</title>
+</head>
+<body>
+	<form method='post'>{% csrf_token %}
+    	{{ form.as_table }}
+    <input type='submit' value='Envoyer'>
+</form>
+</body>
+</html>

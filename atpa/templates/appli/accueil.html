@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Accueil Enseignant</title>
+		<meta CHARSET="utf-8" />
+		<!-- Librairire bootstrap-->
+		{% load staticfiles %}
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
+		<!--Autres-->
+		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+	</head>
+
+	<body>
+		<header>
+			<section class="page-header well text-center">
+				<span class="span1 text-left"><a href="/appli/accueil" title="cliquer ici pour revenir à l'acceuil">Accueil</a></span>
+				<span>Bienvenue {{user.username}}</span>
+				<span class="deconnexion">
+					<a href="/appli/deconnexion" class="btn btn-danger btn-mini" title="Déconnexion">
+						Déconnexion <i class="icon-white icon-off"></i>
+					</a>
+				</span>
+			</section>
+		</header>
+		
+		<section class="container-fluid">
+			<section class="span6 text-center">
+
+				{% if question %}
+
+					<section id="afficherQuestion">
+						<form method="POST" action="/appli/question/{{ question_id }}/">{% csrf_token %}
+
+							<h1>{{ question }}</h1>
+							<p>Temps pour répondre : {{ temps }} secondes</p>
+							<p>Réponses possibles :
+								<ul>
+									{% for reponse in maReponse %}{{ question.id }}
+										<li>{{ reponse }}</li>
+									{% endfor %}
+								</ul>
+							</p>
+
+							<button type="submit" class="btn btn-primary">Charger la question</button>
+						</form>
+					</section>
+
+				{% else %}
+
+					<section id="newQuestion">
+						<a href="../new_question" class="btn btn-primary btn-large" title="Cliquer ici pour créer une nouvelle question">Créer une nouvelle question</a>
+					</section>
+
+				{% endif %}
+
+			</section>
+				
+			<aside class="span4 offset2">
+				<br />
+				<section class="row-fluid">
+
+					<section class="well" id="rechercheQuestion">
+						<h2>Rechercher une question :</h2>
+						<form method="POST">{% csrf_token %}
+							<input type="text" class="input-medium search-query">
+							<button type="submit" class="btn btn-primary">Rechercher</button>
+						</form>
+					</section>
+					
+					<section class="well" id="question">
+						<h2>Questions : </h2>
+							<ul id="listeQuestion" class="text-center">
+								{% for question in question_list %}
+									<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
+									{{ question.libelle }} </a> </li>
+									
+								{% endfor %}	
+							</ul>
+					</section>
+				</section>
+			</aside>
+		</section>
+	</body>
+</html>
