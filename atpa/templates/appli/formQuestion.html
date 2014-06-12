@@ -12,7 +12,21 @@
 		<!--Autres-->
 		<script type="text/javascript" src='{% static "appli/js/canvasjs.min.js" %}'></script>
 		<script src='{% static "appli/js/styleSup.js" %}'></script>
-		<script src='{% static "appli/js/jquery.js" %}'></script>		
+		<script src='{% static "appli/js/jquery.js" %}'></script>	
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script><script type="text/javascript">
+			$(document).ready(function(){
+				var MAX_FIELDS = 10;
+				var fields = 1;
+
+				$(":input[name='add']").click(function () {
+					if (fields < MAX_FIELDS) {
+						$( "input[name='reponse[]']:last" ).clone(true).insertAfter("input[name='reponse[]']:last");
+						$( "<label>"+(fields++)+"</label>" ).insertAfter("input[name='reponse[]']:last");
+						//$("div[id='reponse"+(fields+1)+"']:last").clone(true).insertAfter("div[id='reponse"+fields+"']:last");
+					}
+				});
+			});
+		</script>	
 	</head>
 	<body>
 		<section class="container-fluid">
@@ -73,10 +87,13 @@
 							 {{ form.reponseValide }} 
 						</label> -->
 
-						Réponse(s) :
-						<section id="reponse">
-							
-						</section>
+						
+						<div id="reponses" class="row col-md-2">
+							<label for="reponses">Réponse(s) :</label>
+							<label>1</label>
+			   				<input type="text" name="reponse[]" class="reponse">
+							<input name="add" type="button" value="Ajouter" class="btn btn-primary btn-xs"/>
+						</div>
 
 					<!-- <section class="text-left" id="bonneReponse">
 						<header>Bonnes réponses</header>
