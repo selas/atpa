@@ -98,43 +98,30 @@ def affichageQuestion(request, question_id=None):
 
 
 def new_question(request):
-	if request.method == 'POST' : # If the form has been submitted...
+	if request.method == 'POST' :
+		# QUESTION
 		libelle = request.POST['intituleQuestion']
-		username = request.user
+		enseignant = request.user
+		temps = request.POST['temps']
+		typeQuestion = request.POST['type_question']
+		monObjetType = Type.objects.get(pk=typeQuestion)
 		
-		temps = request.POST['temps'] # A form bound to the POST data
-#		typeReponse = request.POST['typeReponse']
-
-		# form = AjoutQuestion(request.POST)
-		maQuestion=Question(enseignant = username , libelle = libelle , temps = temps , typeReponse = 'Choix simple')
+		maQuestion = Question(enseignant = enseignant , libelle = libelle , temps = temps , typeQuestion = monObjetType)
 		maQuestion.save()
+
+		# REPONSES
+		reponses = []
+		reponses = request.POST['reponse[]']
 		idQuestion = maQuestion.id
 		monObjetQuestion = Question.objects.get(pk=idQuestion)
-		
-		intituleReponseBonne1 = request.POST['intituleReponseBonne1']
-		# intituleReponseBonne2 = request.POST['intituleReponseBonne2']
-		# intituleReponseBonne3 = request.POST['intituleReponseBonne3']
-		# intituleReponseBonne4 = request.POST['intituleReponseBonne4']
-		intituleReponseMauvaise1 = request.POST['intituleReponseMauvaise1']
-		# intituleReponseMauvaise2 = request.POST['intituleReponseMauvaise2']
-		# intituleReponseMauvaise3 = request.POST['intituleReponseMauvaise3']
-		# intituleReponseMauvaise4 = request.POST['intituleReponseMauvaise4']
-		maQuestionReponse1 = Question_reponse(question = monObjetQuestion, libelle = intituleReponseBonne1 , reponseValide = True)
-		# maQuestionReponse1.save()
-		# maQuestionReponse2 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne2 , reponseValide_r = 'Choix simple')
-		# maQuestionReponse3 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne3 , reponseValide_r = 'Choix simple')
-		# maQuestionReponse4 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseBonne4 , reponseValide_r = 'Choix simple')
 
-		maQuestionReponse5 = Question_reponse(question = monObjetQuestion , libelle = intituleReponseMauvaise1 , reponseValide = False)
-		# maQuestionReponse6 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise2 , reponseValide_r = 'Choix simple')
-		# maQuestionReponse7 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise3 , reponseValide_r = 'Choix simple')
-		# maQuestionReponse8 = Question_reponse(question_r = maQuestion.id , libelle_r = intituleReponseMauvaise4 , reponseValide_r = 'Choix simple')
-		
-		maQuestionReponse1.save()
-		maQuestionReponse5.save()
+		for reponse in reponses:
+			maReponse = Reponse(question = monObjetQuestion, libelle = reponse , reponseValide = True)
+			maReponse.save()
+
 			# Redirect to a success page.
 		question_list = Question.objects.filter(enseignant=request.user)
-		return render(request, 'appli/accueil.html' , {'question_list' : question_list, 'enseignant' : username , 'libelle' : libelle , 'temps' : temps , 'typeReponse' :'Choix simple' })
+		return render(request, 'appli/accueil.html' , {'question_list' : question_list, 'enseignant' : enseignant , 'libelle' : libelle , 'temps' : temps , 'typeReponse' :'Choix simple' })
 		
 	else:
 		types = Type.objects.all()

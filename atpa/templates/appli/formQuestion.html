@@ -15,16 +15,27 @@
 		<script src='{% static "appli/js/jquery.js" %}'></script>	
 		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script><script type="text/javascript">
 			$(document).ready(function(){
-				var MAX_FIELDS = 10;
-				var fields = 1;
 
-				$(":input[name='add']").click(function () {
+				var MAX_FIELDS = 9;
+				var fields = 1;
+				var insertion;
+
+				$(":input[name='add']").click(function(e) {
+					e.preventDefault();
 					if (fields < MAX_FIELDS) {
-						$( "input[name='reponse[]']:last" ).clone(true).insertAfter("input[name='reponse[]']:last");
-						$( "<label>"+(fields++)+"</label>" ).insertAfter("input[name='reponse[]']:last");
-						//$("div[id='reponse"+(fields+1)+"']:last").clone(true).insertAfter("div[id='reponse"+fields+"']:last");
+						insertion = "<input type=\"text\" name=\"reponse[]\" class=\"reponse\">"
+						$('label:last').after( '<label>'+(++fields)+'</label>' );
+						$('label:last').append(insertion);
 					}
 				});
+
+				$(":button[name='submit']").click(function() {
+					$("input[name='reponse[]']").each(function(){
+						$("input[name='champreponses']").val($("input[name='champreponses']").val() +"|"+ $(this).val())    
+					});
+				});
+
+
 			});
 		</script>	
 	</head>
@@ -34,15 +45,14 @@
 				<a href="../accueil" title="cliquer ici pour revenir à l'acceuil">Accueil</a>
 			</header>
 			
-			
 			<form class="well" method="POST">{% csrf_token %}
 				<fieldset>
 					<legend>Création de question</legend>
 					<div class="row">
 						<div class="col-md-3">
-							<select class="form-control">
+							<select class="form-control" name="type_question">
 							{% for type in types %}
-								<option value="type{{ forloop.counter }}">{{ type.libelle }}</option>
+								<option value="{{ type.id }}">{{ type.libelle }}</option>
 							{% endfor %}
 							</select>
 						</div>
@@ -66,141 +76,23 @@
 							</section>
 						</div>
 					</div>
-
-					<!-- 	<label for="id_typeReponse" title="Saisissez un type de réponse">
-							Type de réponse : 
-						</label>
-						{{ form.typeReponse }} -->
-
-					<!-- 	<label for="id_intituleReponse" title="Saisissez un type de réponse">
-							Réponse : 
-						</label>
-						 {{ form.intituleReponse }}
-
 						
-							
-						 <label>
-						Cette réponse est elle valide ou non : 
-						</label>
+					<div id="reponses" class="row col-md-3">
+						<label for="reponses">Réponse(s) :</label><br>
+						<label>1<input type="text" name="reponse" class="reponse"></label>
+						
+						<br><input name="add" type="button" value="Ajouter" class="btn btn-primary btn-xs"/>
+					</div>
 
-						<label >
-							 {{ form.reponseValide }} 
-						</label> -->
-
-						
-						<div id="reponses" class="row col-md-2">
-							<label for="reponses">Réponse(s) :</label>
-							<label>1</label>
-			   				<input type="text" name="reponse[]" class="reponse">
-							<input name="add" type="button" value="Ajouter" class="btn btn-primary btn-xs"/>
-						</div>
-
-					<!-- <section class="text-left" id="bonneReponse">
-						<header>Bonnes réponses</header>
-						
-						<label for="id_intituleReponseBonne">
-							Réponse : 
-						</label>
-						 {{ form.intituleReponseBonne1 }}
-					 	 {{ form.intituleReponseBonne2 }}
-						 {{ form.intituleReponseBonne3 }}
-						 {{ form.intituleReponseBonne4 }} -->
-					<!-- </section>	
-					<section class="text-right" id="mauvaiseReponse">
-						<header>Mauvaises réponses</header>
-						<label for="id_intituleReponseMauvaise">
-							Réponse : 
-						</label>
-						{{ form.intituleReponseMauvaise1 }}
-						{{ form.intituleReponseMauvaise2 }}
-						{{ form.intituleReponseMauvaise3 }}
-						{{ form.intituleReponseMauvaise4 }}
-					</section>	 -->
-						
-
-						
-						
-					
-					
-					
 					<section class="text-center">
-						<button class="btn btn-primary btn-large" title="cliquer ici pour créer la question">
+						<button name="submit" class="btn btn-primary btn-large" title="cliquer ici pour créer la question">
 							Créer
 						</button>
 					</section>
 					</fieldset>
 				</form>
 
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-
-				<form class="well">
-				<fieldset>
-					<legend>Création de question</legend>
-					
-					<ul class="navigation unstyled">
-						<li class="toggleSubMenu btn" title="cliquer ici pour choisir le style de question voulu">
-							<i class="icon-chevron-down"></i><span> Style de question</span>
-							<ul class="subMenu unstyled">
-								<li><a href="#" title="Pour créer une question Fermée" onclick="affrRF();">Question Fermée</a></li>
-								<li><a href="#" title="Pour créer une question à choix multiple" onclick="affrRO();">Question Ouverte</a></li>
-								<li><a href="#" title="Pour créer une question avec zone de saisie" onclick="affrRZS();">Zone de saisie</a></li>
-							</ul>
-						</li> 
-					</ul>
-					<span id="stylebtn"></span>
-					<button class="btn" onclick="cache();" title="cliquer ici pour réinitialiser l'affichage">RAZ</button>
-					<section class="text-center">
-						<br/>
-						<label for="ami" class="radio">Intitulé de la question :<br />
-						<textarea id="textarea" rows="3" title="Veuillez saisir la question"></textarea>
-						</label>
-						<label for="web" class="radio" title="Veuillez saisir le temps">Temps imparti : 
-						<input class="input-mini" name="origine" id="tempsQuestion" />
-						</label>
-					</section>
-					<br /><br />
-					<p class="text-center">Réponse type : </p>
-					<br />
-					<section id="AffRepFermee" class="text-center"> 
-						<label for="web">
-						<input type="radio" name="origine" value="web" id="web" />Oui </label>
-							
-						<label for="hasard">
-						<input type="radio" name="origine" value="hasard" id="hasard" />Non </label>
-							
-					</section>
-					
-					<section id="AffRepOuverte" class="text-center">
-						<label><input type="checkbox" /> 1+1=2</label><br />
-						<label><input type="checkbox" /> 1+2=5</label><br />
-						<label><input type="checkbox" /> 3*2=6</label><br />
-						<label><input type="checkbox" /> La réponse D</label>
-					</section>
-					
-					<section id="AffRepSaisie" class="text-center">
-						<textarea id="textarea" rows="3" title="Veuillez saisir la réponse"></textarea>
-					</section>
-					
-					<br />
-					<section class="text-center">
-						<button class="btn btn-primary btn-large" title="cliquer ici pour créer la question">Créer</button>
-					</section>
-					</fieldset>
-				</form>
- -->
-
-			
 		</section>
+		<input name="champreponses" type="hidden"/>
 	</body>
 </html>

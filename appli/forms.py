@@ -17,7 +17,7 @@ class AjoutQuestion(forms.Form):
 
 	intituleQuestion = forms.CharField(widget = forms.Textarea(attrs = {'rows' : '2' }))
 	temps = forms.IntegerField()
-#	typeReponse = forms.MultipleChoiceField(widget=forms.Select, choices=TYPEREP_CHOICES)
+	# typeReponse = forms.MultipleChoiceField(widget=forms.Select, choices=TYPEREP_CHOICES)
 
 	intituleReponseBonne1 = forms.CharField(max_length = 100)
 	intituleReponseMauvaise1 = forms.CharField(max_length = 100)
