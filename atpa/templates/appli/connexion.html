@@ -6,7 +6,6 @@
 
 		<!-- Librairire bootstrap-->
 		{% load staticfiles %}
-		<!--<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.css" %}' media="screen"/>-->
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
 		
@@ -17,52 +16,29 @@
 	</head>
 
 	<body>
-		<section class="container-fluid">
-			<header id="coverHead" class="page-header">
-				<section class="text-right">
-					<ul class="navigation unstyled">
-						<li class="toggleSubMenu btn btn-mini" title="Cliquer ici pour vous connecter  en tant qu'enseignant"><span> Enseignants</span>
-						<ul class="subMenu unstyled">
-							<li>    
-								<section class="span3">
-									<form class="form-inline" id="formconnexion" method="POST">
-										{% csrf_token %}
-													
-										{{ form.username }}
-										<!--ajouter equivalent du placeholder-->
+		<div class="container-fluid jumbotron">
+			<form class="form-inline pull-right" id="formconnexion" method="POST">
+				{% csrf_token %}
+				{{ form.username }}<br>
+				{{ form.password }}<br>
+				<button type="submit" title="Cliquer ici pour vous connecter" class="btn btn-primary btn-xs pull-right">Se connecter</button>
+			</form>
 
-										{{ form.password }}
-										<!--ajouter equivalent du placeholder-->
-													
-		
-										<button type="submit" title="Cliquer ici pour vous connecter" class="btn btn-primary btn-small pull-right"><i class="icon-user icon-white"></i>Se connecter</button>
-									</form>
-								</section>
-							</li>
-						</ul>
-						</li>
-					</ul>
-				</section>
-				<h1  class="text-center" id="atpa">ATPA</h1>															
+			<header id="coverHead">
+				<img id="iut" src="../../static/appli/image/Logo-univ-orleans.png">
+				<h1 class="col-xs-offset-2  col-xs-2" id="atpa">ATPA</h1>
 			</header>
-		</section>
+		</div>
 			
-			<section id="coEtu" class="text-center">	
-					<a class="btn btn-primary text-center" href="../question_en_ligne" title="Cliquer ici pour commencer">
-						<h2>Commencer</h2></a>
-			</section>	
-			<hr />
-			
-		<section class="container-fluid">
-			
-			
-			<p class="text-center lead">Utiliser vos équipements personnels
-			 (téléphone, ordinateur portable, tablette électronique) pour répondre aux questions posées.</p>
-			 <p class="text-center lead">Pour cela rien de plus simple! Il suffit de cliquer sur Rejoindre en haut à droite et de répondre aux 
-			 questions posées dans le temps imparti</p>
-							
-    						
-		</section>
+		<div id="coEtu" class="text-center">	
+			<a class="btn btn-primary btn-lg text-center" href="../question_en_ligne" title="Cliquer ici pour commencer">Commencer</a>
+		</div>	
+		
+		<div class="col-xs-offset-2 col-xs-8">
+			<p class="text-center lead">Utilisez vos équipements personnels
+				(téléphone, ordinateur, tablette) pour répondre aux questions posées.
+			</p>
+		</div>
 	</body>
 
 </html>
