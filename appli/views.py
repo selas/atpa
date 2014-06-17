@@ -213,20 +213,47 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 
 
 
-def reponse(request):
+def reponse(request, question_ligne_id):
 	if request.method == 'POST' :
 
-		for item in request.POST:
-			if item != "csrfmiddlewaretoken":
-				idReponse = request.POST[item]
-				idQuestion = request.POST['question']
-				question = Question.objects.get(pk=idQuestion)
-				question_ligne = Question_ligne.objects.all().aggregate(Max('dateDebut'))
-				ip = IP()
+		idQuestion = request.POST['question']
+		question = Question.objects.get(pk=idQuestion)
+		ip = IP()
+
+		#recupere la question en ligne correspondant 
+		question_ligne = Question_ligne.objects.get(pk=question_ligne_id)
+
+		dateFinished = question_ligne.dateDebut + timedelta(seconds=question_ligne.dureeActivite)
+		
+		naive = datetime.utcnow()
+		aware = naive.replace(tzinfo=timezone.utc)
+
+		#Recupere le nombre d'enregistrement present dans la bdd 
+		#en fonction de l'utilisateur et de la question mise en ligne
+		reponse_ligne = Reponse_ligne.objects.filter(question=question_ligne, ip=ip).count()
+
+		if reponse_ligne < 1:
 
 
-				reponse_ligne = Reponse_ligne(question=question_ligne, reponse=idReponse, ip=ip)
-				reponse_ligne.save()
+			for item in request.POST:
+				if item != "csrfmiddlewaretoken":
+					idReponse = request.POST[item]
+
+					if aware < dateFinished:
+						reponses = Reponse.objects.filter(question=question_ligne.question)
+						reponse_ligne = Reponse_ligne(question=question_ligne, reponse=idReponse, ip=ip)
+						reponse_ligne.save()
+						
+					else : 
+						reponses = Reponse.objects.filter(question=question_ligne.question)
+						return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
+
+		return redirect("accueil")
+
+
+
+
+				
 
 
 		# return HttpResponse(str(idReponse))
