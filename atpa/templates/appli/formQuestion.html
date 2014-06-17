@@ -13,7 +13,8 @@
 		<script type="text/javascript" src='{% static "appli/js/canvasjs.min.js" %}'></script>
 		<script src='{% static "appli/js/styleSup.js" %}'></script>
 		<script src='{% static "appli/js/jquery.js" %}'></script>	
-		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script><script type="text/javascript">
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script type="text/javascript">
 			$(document).ready(function(){
 
 				var MAX_FIELDS = 9;
@@ -23,19 +24,29 @@
 				$(":input[name='add']").click(function(e) {
 					e.preventDefault();
 					if (fields < MAX_FIELDS) {
-						insertion = "<input type=\"text\" name=\"reponse\" class=\"reponse\"><input type=\"checkbox\" name=\"choix"+(++fields)+"\" value=\""+fields+"\">";
-						$('label:last').after( '<label>'+fields+'</label>' );
+						insertion = "<input type=\"text\" name=\"reponse\" class=\"reponse\"><input type=\"checkbox\" name=\"choix\" value=\"false\">";
+						$('label:last').after( '<label>'+(++fields)+'</label>' );
 						$('label:last').append(insertion);
 					}
 				});
 
 				$(":button[name='submit']").click(function() {
 					$("input[name='reponse']").each(function(){
-						if ($("input[name='champReponses']").val() == "") {
-							$("input[name='champReponses']").val($("input[name='reponse']:first").val());
+						if ($("input[name='champReponses_lib']").val() == "") {
+							$("input[name='champReponses_lib']").val($("input[name='reponse']:first").val());
 						}
 						else {
-							$("input[name='champReponses']").val($("input[name='champReponses']").val() +"|"+ $(this).val());
+							$("input[name='champReponses_lib']").val($("input[name='champReponses_lib']").val() +"|"+ $(this).val());
+						}
+					});
+
+					$("input[name='choix']").each(function(){
+						alert('lalalal');
+						if ($("input[name='champReponses_bool']").val() == "") {
+							$("input[name='champReponses_bool']").val($(this).prop('checked'));
+						}
+						else {
+							$("input[name='champReponses_bool']").val($("input[name='champReponses_bool']").val() +"|"+ $(this).prop('checked'));
 						}
 					});
 				});
@@ -61,8 +72,7 @@
 						</div>
 					</div>
 
-
-					<!-- <button class="btn" onclick="cache();" title="cliquer ici pour réinitialiser l'affichage">RAZ</button> -->
+<!-- QUESTION -->
 					<div class="row">
 						<div class="col-md-3">
 							<section>
@@ -80,22 +90,24 @@
 						</div>
 					</div>
 
+<!-- REPONSES -->
 					<div id="reponses" class="row col-md-3">
 						<label for="reponses">Réponse(s) :</label><br>
-						<label>1<input type="text" name="reponse" class="reponse"></label>
+						<label>1<input type="text" name="reponse" class="reponse"><input class="increase" type="checkbox" name="choix"></label>
 
 						<br><input name="add" type="button" value="Ajouter" class="btn btn-primary btn-xs"/>
 					</div>
 
+<!-- CREATION -->
 					<section class="text-center">
 						<button name="submit" class="btn btn-primary btn-large" title="cliquer ici pour créer la question">
 							Créer
 						</button>
 					</section>
 					</fieldset>
-					<input name="champReponses" type="hidden"/>
+					<input name="champReponses_lib" type="hidden"/>
+					<input name="champReponses_bool" type="hidden"/>
 				</form>
-
 		</section>
 	</body>
 </html>
