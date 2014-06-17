@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
-
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response, render, redirect
-from appli.models import Question, Reponse, Question_ligne, Type
+from appli.models import Question, Reponse, Question_ligne, Reponse_ligne, Type
 from appli.forms import Connexion, AjoutQuestion#, AfficheQuestion
 from django.views.decorators.csrf import csrf_protect
 from datetime import datetime 
+from django.db.models import Max
+import socket
+import time
+from django.utils import timezone
+from datetime import datetime, timedelta
+
 
 #from django.contrib.auth.models import User
 
@@ -56,7 +62,7 @@ def accueil(request):
 			return render(request, 'appli/accueil.html' , { 'question_list' : question_list })
 
 	else:
-		return redirect('connexion')
+		return redirect(reverse('connexion'))
 
 
 def deconnexion(request):
@@ -144,28 +150,87 @@ def new_question(request):
 #			#context_instance = RequestContext(request) )
 
 
-
-def question_posee(request, question_posee_id):
-	if request.method == 'POST' : 
-		
-		maQuestion = Question.objects.get(pk=question_posee_id)
-		maQuestion_posee = Question_ligne(question=maQuestion, dureeActivite=maQuestion.temps)
-		maQuestion_posee.save()
-		return redirect("question_en_ligne")
-
-
-def question_en_ligne(request):
-	#if request.method == 'POST' : 
-
+#acces a la page pour repondre a une question pour une personne identifiée
+def question_posee(request, question_posee_id=None, enseignant_id=None):
 	if request.user.is_authenticated():
+		if request.method == 'POST' :
+			
+			question = Question.objects.get(pk=question_posee_id)
 
-		connecte = request.user
-		return render(request, 'appli/enseignant_question.html', {'connecte':connecte})
+			question_ligne = Question_ligne(question=question, dureeActivite=question.temps)
+			question_ligne.save()
+			reponses = Reponse.objects.filter(question=question_ligne.question)
+			return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
 
+		return redirect("accueil")
 	else:
-		connecte = None
-		question_posee = None # A modifier la prochaine fois
-		return render(request, 'appli/enseignant_question.html', {'connecte':connecte, 'question_posee':question_posee})
+		if enseignant_id :
+
+			#recupere les question d'un enseignant
+			question = Question.objects.filter(enseignant=enseignant_id)
+			#recupere toute les question posée par l'enseignant
+			question_ligne = Question_ligne.objects.filter(question=question)
+			# recupere la date maximale de mise en ligne
+			qu = question_ligne.aggregate(dateDebut = Max('dateDebut'))
+			# question_active = Question_ligne.objects.get(dateDebut=question)
+
+			if qu["dateDebut"] :
+				question_ligne = Question_ligne.objects.get(dateDebut=qu["dateDebut"])
+
+				dateFinished = question_ligne.dateDebut + timedelta(seconds=question_ligne.dureeActivite)
+				
+				naive = datetime.utcnow()
+				aware = naive.replace(tzinfo=timezone.utc)
+
+				if aware < dateFinished:
+
+					reponses = Reponse.objects.filter(question=question_ligne.question)
+					return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
+			
+		return render(request, 'appli/enseignant_question.html', {})
+
+
+
+def reponse(request):
+	if request.method == 'POST' :
+
+		for item in request.POST:
+			if item != "csrfmiddlewaretoken":
+				idReponse = request.POST[item]
+				idQuestion = request.POST['question']
+				question = Question.objects.get(pk=idQuestion)
+				question_ligne = Question_ligne.objects.all().aggregate(Max('dateDebut'))
+				ip = IP()
+
+
+				reponse_ligne = Reponse_ligne(question=question_ligne, reponse=idReponse, ip=ip)
+				reponse_ligne.save()
+
+
+		# return HttpResponse(str(idReponse))
+
+	return redirect("accueil") 
+
+
+def IP():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(('google.com', 0))
+    return s.getsockname()[0]
+
+
+
+# def question_en_ligne(request):
+# 	#if request.method == 'POST' : 
+
+# 	if request.user.is_authenticated():
+
+# 		connecte = request.user
+# 		return render(request, 'appli/enseignant_question.html', {'connecte':connecte})
+
+# 	else:
+# 		connecte = None
+# 		question_posee = None # A modifier la prochaine fois
+# 		return render(request, 'appli/enseignant_question.html', {'connecte':connecte, 'question_posee':question_posee})
 
 		
 

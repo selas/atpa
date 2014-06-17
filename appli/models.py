@@ -8,7 +8,7 @@ class Type(models.Model):
 	libelle = models.CharField( "Type de question", max_length=20)
 
 	def __unicode__(self):
-		return self.libelle
+		return unicode(self.libelle)
 
 
 class Question(models.Model):
@@ -18,8 +18,8 @@ class Question(models.Model):
 	typeQuestion = models.ForeignKey(Type)
 
 	def __unicode__(self):
-		return self.libelle
-		
+		return unicode(self.libelle)
+
 
 class Reponse(models.Model):
 	question = models.ForeignKey(Question)
@@ -27,7 +27,7 @@ class Reponse(models.Model):
 	reponseValide = models.BooleanField("Cette réponse est-elle bonne ou non", default=True)
 
 	def __unicode__(self):
-		return self.libelle
+		return unicode(self.libelle)
 
 
 class Question_ligne(models.Model):
@@ -36,7 +36,7 @@ class Question_ligne(models.Model):
 	dureeActivite = models.IntegerField("Temps pour répondre", max_length = 4)
 
 	def __unicode__(self):
-		return self.question
+		return unicode(self.question)
 
 
 class Reponse_ligne(models.Model):
@@ -45,5 +45,5 @@ class Reponse_ligne(models.Model):
 	ip = models.CharField("L'adresse IP'", max_length = 39)
 
 	def __unicode__(self):
-		return self.question
+		return unicode(self.question)
 
