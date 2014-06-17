@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 
-
-
-
 <html>
 	<head>
 		<title>Question en cours</title>
@@ -16,7 +13,9 @@
 		<script src='{% static "appli/bootstrap/js/styleSup.js" %}'></script>
 		<script src='{% static "appli/bootstrap/js/jquery.js" %}'></script>	
 
-{% if connecte %}
+<!-- Si l'utilisateur est connecté -->
+
+{% if user.is_authenticated %}
 
 		<script src='{% static "appli/js/chart.js" %}'></script>
 		<script src='{% static "appli/js/scriptgraph.js" %}'></script>
@@ -29,30 +28,17 @@
 				<a id="lien" href="enseignant_acceuil.html" title="cliquer ici pour revenir à l'acceuil Enseignant">Accueil Enseignant</a>
 			</header>
 			
-			
 				<section id="question" class="container-fluid text-center ">
-	
-				<h1>Avez vous fait vos devoirs?</h1>
-		
-				<!--<form class="well span3 offset1 text-center">
-					<span id="compt"></span>
-				</form>-->
-				<section class="row-fluid">
-					<form class="well span4 text-center offset4 centered">
-						<span id="compt2"></span>
-					</form>
-				</section>
-				<br />
 				
-				<span>Secondes :</span><br />
-				<input id="rangeS" type="range" min="30" max="600" value="30" step="30" 
-				oninput="document.getElementById('AfficheRange').textContent=value" />
-				<span id="AfficheRange">&nbsp;</span>
+				<h1>{{question_ligne.question.libelle}}</h1>
 				
+				<span> 
+					Secondes : 
+					<div class="decompte">{{question_ligne.dureeActivite}}</div> 
+				</span>
 				
 				<section class="btn-group">
-					<button class="btn btn-primary btn-large" title="Cliquer ici pour Ajouter des secondes" onclick="ajoutSec()">
-						<i class="icon-white icon-time"></i> Ajout secondes</button>
+					
 					<button class="btn btn-primary btn-large" title="Cliquer ici pour Afficher/masquer le graphique" onclick="calculer()">
 						<i class="icon-white icon-picture"></i> Graphique</button>
 					<button class="btn btn-primary btn-large" title="Cliquer ici pour Afficher/masquer la réponse" onclick="reponse()">
@@ -61,8 +47,9 @@
 						<i class="icon-white icon-off"></i> Stop</button>
 				</section>
 				
-				<br /><br />
-				<section class="well text-center span5 offset4" id="reponseEns">Réponse
+				
+				<section class="well text-center span5 offset4" id="reponseEns">Réponses
+
 				</section>
 				
 				<script type="text/javascript" >calculer();</script>
@@ -70,63 +57,68 @@
 				
 	</body>
 
-{% elif question_ligne %}
-
-
-	<link rel="stylesheet" type="text/css" href='{% static "appli/css/style.css" %}' media="screen" />
-	</head>
-	<body onload="decompte(), cache()">
-		<section class="container-fluid">
-			
-			<header id="headquestetu" class="page-header well">
-				<a href="acceuil.html" title="cliquer ici pour retourner à la page d'acceuil">Acceuil</a>
-				<h1 class="text-center" id="titrequestetu">Répondez à la question posée</h1>
-			</header>
-		
-			<section class="text-center">
-			<button class="btn btn-info btn-large" onclick="question()" title="cliquer ici pour afficher et/ou masquer la question">
-				Question</button>
-			</section>
-			
-			<section id="question" class="container-fluid text-center">
-				<br /> <br />
-				<span>Avez vous fait vos devoirs?</span>
-				<br />
-			</section>
-			
-			<!--<section class="row-fluid">
-				<form class="well span4 text-center offset4 centered">
-					<span id="compt2"></span>
-				</form>
-			</section>-->
-				
-			<br />	
-			<section id="div_bouton" class="text-center">
-				<button id="btnEtuYes" class="btn btn-info btn-large" onclick="desactivebtn()">OUI</button>
-				<button id="btnEtuNo" class="btn btn-info btn-large offset1" onclick="desactivebtn()">NON</button>
-			</section>
-				
-			
-		</section>
-	</body>
-
-
-		
 {% else %}
+	{% if question_ligne %}
 
-	</head>
-		<body>
+
+		<link rel="stylesheet" type="text/css" href='{% static "appli/css/style.css" %}' media="screen" />
+		</head>
+		<body onload="decompte(), cache()">
 			<section class="container-fluid">
 				
-				<header class="page-header well">
-					<a href="/appli/accueil/" title="cliquer ici pour retourner à la page d'acceuil">Acceuil</a>
-					<h1 class="text-center">Aucune question </h1>
+				<header id="headquestetu" class="page-header well">
+					<a href="acceuil.html" title="cliquer ici pour retourner à la page d'acceuil">Acceuil</a>
 				</header>
+			
+				<section id="question" class="container-fluid text-center">
+					<br /> <br />
+					<span>{{ question_ligne.question.libelle }}</span>
+					<br />
+				</section>
+				
+				<form action="{% url 'reponse' %}" method="POST">{% csrf_token %}
+					{% for reponse in reponses %}
 
+						<input type="hidden" name="question" value="{{ question_ligne.question.id }}">
+						{% if question_ligne.question.typeQuestion.libelle == "ouinon" %}
+  							<input type="radio" name="reponse" id="{{ reponse.libelle }}" value="{{ reponse.id }}">
+  							<label for="{{ reponse.libelle }}">{{ reponse.libelle }}</label><br>
+						{% elif question_ligne.question.typeQuestion.libelle == "saisie" %}
+							<input type="textarea" name="reponse"><br />
+						{% elif question_ligne.question.typeQuestion.libelle == "choixMultiple" %}
+							<input type="checkbox" name="{{ reponse.libelle }}" id="{{ reponse.libelle }}" value="{{ reponse.id }}"/> 
+							<label for="{{ reponse.libelle }}">{{ reponse.libelle }}</label><br />
+						{% endif %}
+
+					{% endfor %}
+
+					<button  type="submit" class="btn btn-primary ">Valider</button>
+
+				</form>
+
+				
+					
+				
 			</section>
 		</body>
-	
 
+
+			
+	{% else %}
+
+		</head>
+			<body>
+				<section class="container-fluid">
+					
+					<header class="page-header well">
+						<a href="/appli/accueil/" title="cliquer ici pour retourner à la page d'acceuil">Acceuil</a>
+						<h1 class="text-center">Aucune question </h1>
+					</header>
+
+				</section>
+			</body>
+		
+
+	{% endif %}
 {% endif %}
-
 </html>
