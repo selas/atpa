@@ -28,11 +28,9 @@
 				<a id="lien" href="enseignant_acceuil.html" title="cliquer ici pour revenir à l'acceuil Enseignant">Accueil Enseignant</a>
 			</header>
 			
-			
 				<section id="question" class="container-fluid text-center ">
 				
 				<h1>{{question_ligne.question.libelle}}</h1>
-				
 				
 				<span> 
 					Secondes : 
@@ -54,10 +52,10 @@
 
 				</section>
 				
-				<canvas id="graph" width="900" height="500"></canvas>
+				<script type="text/javascript" >calculer();</script>
+				<canvas id="graph" width="600" height="500"></canvas>
 				
 	</body>
-
 
 {% else %}
 	{% if question_ligne %}

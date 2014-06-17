@@ -23,19 +23,22 @@
 				$(":input[name='add']").click(function(e) {
 					e.preventDefault();
 					if (fields < MAX_FIELDS) {
-						insertion = "<input type=\"text\" name=\"reponse[]\" class=\"reponse\">"
-						$('label:last').after( '<label>'+(++fields)+'</label>' );
+						insertion = "<input type=\"text\" name=\"reponse\" class=\"reponse\"><input type=\"checkbox\" name=\"choix"+(++fields)+"\" value=\""+fields+"\">";
+						$('label:last').after( '<label>'+fields+'</label>' );
 						$('label:last').append(insertion);
 					}
 				});
 
 				$(":button[name='submit']").click(function() {
-					$("input[name='reponse[]']").each(function(){
-						$("input[name='champreponses']").val($("input[name='champreponses']").val() +"|"+ $(this).val())    
+					$("input[name='reponse']").each(function(){
+						if ($("input[name='champReponses']").val() == "") {
+							$("input[name='champReponses']").val($("input[name='reponse']:first").val());
+						}
+						else {
+							$("input[name='champReponses']").val($("input[name='champReponses']").val() +"|"+ $(this).val());
+						}
 					});
 				});
-
-
 			});
 		</script>	
 	</head>
@@ -44,7 +47,7 @@
 			<header class="page-header">
 				<a href="../accueil" title="cliquer ici pour revenir à l'acceuil">Accueil</a>
 			</header>
-			
+
 			<form class="well" method="POST">{% csrf_token %}
 				<fieldset>
 					<legend>Création de question</legend>
@@ -76,11 +79,11 @@
 							</section>
 						</div>
 					</div>
-						
+
 					<div id="reponses" class="row col-md-3">
 						<label for="reponses">Réponse(s) :</label><br>
 						<label>1<input type="text" name="reponse" class="reponse"></label>
-						
+
 						<br><input name="add" type="button" value="Ajouter" class="btn btn-primary btn-xs"/>
 					</div>
 
@@ -90,9 +93,9 @@
 						</button>
 					</section>
 					</fieldset>
+					<input name="champReponses" type="hidden"/>
 				</form>
 
 		</section>
-		<input name="champreponses" type="hidden"/>
 	</body>
 </html>
