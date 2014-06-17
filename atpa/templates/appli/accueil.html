@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
 		<!--Autres-->
+		<script type="text/javascript" src='{% static "appli/jquery-qrcode-master/src/jquery.qrcode.min.js" %}'></script>
 		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
 		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
@@ -21,7 +22,7 @@
 				</a>
 			</div>
 			<div id="newQuestion">
-				<a href="../new_question" class="btn btn-primary btn-xs pull-left">Créer une nouvelle question</a>
+				<a href="{% url 'new_question' %}" class="btn btn-primary btn-xs pull-left">Créer une nouvelle question</a>
 			</div>
 	
 			<h1 class="text-center"><small>Bienvenue {{user.username}}</small></h1>	
@@ -30,16 +31,16 @@
 			<aside class="col-md-4 col-lg-4">
 				<div class="row-fluid">
 
-					<div class="well" id="rechercheQuestion">
-						<h2>Rechercher une question :</h2>
+					<div class="well jumbotron" id="rechercheQuestion">
+						<h2>Rechercher une question</h2>
 						<form method="POST">{% csrf_token %}
 							<input type="text" class="input-medium search-query">
 							<button type="submit" class="btn btn-primary">Rechercher</button>
 						</form>
 					</div>
 					
-					<div class="well" id="question">
-						<h2>Questions : </h2>
+					<div class="well jumbotron" id="question">
+						<h2>Questions</h2>
 							<ul id="listeQuestion" class="text-center">
 								{% for question in question_list %}
 									<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
@@ -53,7 +54,13 @@
 
 			</aside>
 			<div class="col-xs-offset-7 col-md-offset-7">
-
+			<canvas>
+							<div id="qrcode">skf</div>	
+							<script>
+								// jquery('#qrcode').qrcode("this plugin is great");
+								jquery('#qrcode').qrcode({width: 80,height: 80,text: "size doesn't matter"});</script>
+							
+			</canvas>								
 				{% if question %}
 
 					<div id="afficherQuestion">
