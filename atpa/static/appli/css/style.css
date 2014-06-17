@@ -1,4 +1,4 @@
-.increase {
+/*.increase {
 	width:30px;
 	height:30px;
 }
@@ -65,24 +65,6 @@
 	margin-bottom:-5%;
 }
 
-#ordi{
-	opacity: 0.3;
-	width: 15%;
-	height: 15%;
-}
-
-#iut{
-	margin-top: -10%;
-	margin-left: 90%;
-	width: 10%;
-	height: 10%;
-}
-
-#tablette{
-	opacity: 0.3;
-	width: 15%;
-	height: 15%;
-}
 
 h2{
 	font-size: 20px;	
@@ -91,3 +73,7 @@ h2{
 #formconnexion{
 	position: relative;
 }
+
+#newQuestion{
+	margin-top: -30px;
+}*/
