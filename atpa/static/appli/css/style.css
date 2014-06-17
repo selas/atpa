@@ -1,5 +1,6 @@
-#newQuestion{
-	margin-top:30%;
+.increase {
+	width:30px;
+	height:30px;
 }
 
 #lien{
@@ -63,6 +64,8 @@
 	padding-top:2.5%;
 	margin-bottom:-5%;
 }
+
+
 
 h2{
 	font-size: 20px;	

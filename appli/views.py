@@ -6,7 +6,10 @@ from django.shortcuts import render_to_response, render, redirect
 from appli.models import Question, Reponse, Question_ligne, Type
 from appli.forms import Connexion, AjoutQuestion#, AfficheQuestion
 from django.views.decorators.csrf import csrf_protect
-from datetime import datetime 
+from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 #from django.contrib.auth.models import User
 
@@ -99,6 +102,7 @@ def affichageQuestion(request, question_id=None):
 
 def new_question(request):
 	if request.method == 'POST' :
+
 		# QUESTION
 		libelle = request.POST['intituleQuestion']
 		enseignant = request.user
@@ -110,13 +114,17 @@ def new_question(request):
 		maQuestion.save()
 
 		# REPONSES
-		reponses = []
-		reponses = request.POST['reponse[]']
+		listeReponses = request.POST['champReponses']
+		logger.error(listeReponses)
 		idQuestion = maQuestion.id
 		monObjetQuestion = Question.objects.get(pk=idQuestion)
 
-		for reponse in reponses:
-			maReponse = Reponse(question = monObjetQuestion, libelle = reponse , reponseValide = True)
+		champReponsesSplit = listeReponses.split('|')
+		logger.error(champReponsesSplit)
+		logger.error(len(champReponsesSplit))
+		for i in range(0,len(champReponsesSplit)):
+			logger.error(champReponsesSplit[i])
+			maReponse = Reponse(question = monObjetQuestion, libelle = champReponsesSplit[i] , reponseValide = True)
 			maReponse.save()
 
 			# Redirect to a success page.
