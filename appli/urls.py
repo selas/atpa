@@ -8,9 +8,13 @@ urlpatterns = patterns('',
 
 	url(r'^accueil/$', 'appli.views.accueil', name='accueil'),
 	url(r'^accueil/(?P<question_id>\w{1,4})/$', 'appli.views.affichageQuestion', name='affichageQuestion'),
-	url(r'^question/(?P<question_posee_id>\w{1,4})/$', 'appli.views.question_posee', name='question_posee'),
 
-	url(r'^question_en_ligne/$', 'appli.views.question_en_ligne', name='question_en_ligne'),
+	#Lorsqu'un etudiant ou prof souhaite acceder a la reponse posée
+	url(r'^question/(?P<question_posee_id>\w{1,4})/$', 'appli.views.question_posee', name='question_posee'),
+	url(r'^question/enseignant/(?P<enseignant_id>\w{1,4})/$', 'appli.views.question_posee', name='question_posee'),
+
+	# url(r'^question_posee/$', 'appli.views.question_posee', name='question_posee'),
+	url(r'^reponse/$', 'appli.views.reponse', name='reponse'),
 	url(r'^connexion/$', 'appli.views.connexion', name='connexion'),
 	url(r'^deconnexion/$', 'appli.views.deconnexion', name='deconnexion'),
 	url(r'^new_question/$', 'appli.views.new_question', name='new_question'),

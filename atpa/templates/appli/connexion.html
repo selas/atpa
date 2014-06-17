@@ -17,22 +17,23 @@
 
 	<body>
 		<div class="container-fluid jumbotron">
+		<header id="coverHead">
+				<img id="ordi" src="../../static/appli/image/ordi.png" class="pull-left img-rounded">
+				<img id="tablette" src="../../static/appli/image/tablette.png" class="pull-left img-rounded">
+				<h1 class="col-xs-offset-1  col-xs-2" id="atpa">ATPA</h1>
+			</header>
 			<form class="form-inline pull-right" id="formconnexion" method="POST">
 				{% csrf_token %}
 				{{ form.username }}<br>
 				{{ form.password }}<br>
 				<button type="submit" title="Cliquer ici pour vous connecter" class="btn btn-primary btn-xs pull-right">Se connecter</button>
 			</form>
-
-			<header id="coverHead">
-				<img id="iut" src="../../static/appli/image/Logo-univ-orleans.png">
-				<h1 class="col-xs-offset-2  col-xs-2" id="atpa">ATPA</h1>
-			</header>
-		</div>
+			<img id="iut" src="../../static/appli/image/Logo-univ-orleans.png" class="pull-right">
 			
-		<div id="coEtu" class="text-center">	
+		</div>
+		<!-- <div id="coEtu" class="text-center">	
 			<a class="btn btn-primary btn-lg text-center" href="../question_en_ligne" title="Cliquer ici pour commencer">Commencer</a>
-		</div>	
+		</div>	 -->
 		
 		<div class="col-xs-offset-2 col-xs-8">
 			<p class="text-center lead">Utilisez vos équipements personnels
