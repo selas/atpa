@@ -121,20 +121,33 @@ def new_question(request):
 		maQuestion.save()
 
 		# REPONSES
-		listeReponses = request.POST['champReponses']
-		logger.error(listeReponses)
+		listeReponses_lib = request.POST['champReponses_lib']
+		listeReponses_bool = request.POST['champReponses_bool']
+		logger.error(listeReponses_lib)
 		idQuestion = maQuestion.id
 		monObjetQuestion = Question.objects.get(pk=idQuestion)
 
-		champReponsesSplit = listeReponses.split('|')
-		logger.error(champReponsesSplit)
-		logger.error(len(champReponsesSplit))
-		for i in range(0,len(champReponsesSplit)):
-			logger.error(champReponsesSplit[i])
-			maReponse = Reponse(question = monObjetQuestion, libelle = champReponsesSplit[i] , reponseValide = True)
+		champReponsesSplit_lib = listeReponses_lib.split('|')
+		champReponsesSplit_bool = listeReponses_bool.split('|')
+
+		logger.error(len(champReponsesSplit_lib))
+
+		logger.error(champReponsesSplit_lib)
+		logger.error(champReponsesSplit_bool)
+
+		for i in range(0,len(champReponsesSplit_lib)):
+			logger.error(champReponsesSplit_lib[i])
+			logger.error(champReponsesSplit_bool[i])
+
+			if champReponsesSplit_bool[i] == 'true' :
+				champReponsesSplit_bool[i] = True
+			else :
+				champReponsesSplit_bool[i] = False
+
+			maReponse = Reponse(question = monObjetQuestion, libelle = champReponsesSplit_lib[i] , reponseValide = champReponsesSplit_bool[i])
 			maReponse.save()
 
-			# Redirect to a success page.
+		# Redirect to a success page.
 		question_list = Question.objects.filter(enseignant=request.user)
 		return render(request, 'appli/accueil.html' , {'question_list' : question_list, 'enseignant' : enseignant , 'libelle' : libelle , 'temps' : temps , 'typeReponse' :'Choix simple' })
 		

@@ -16,19 +16,43 @@
 	<body>
 		<header class="jumbotron">
 			<div class="deconnexion">
-				<a href="/appli/deconnexion" class="btn btn-danger btn-large pull-right" >
+				<a href="/appli/deconnexion" class="btn btn-danger btn-xs pull-right" >
 					Déconnexion <span class="icon-white icon-off"></span>
 				</a>
 			</div>
 			<div id="newQuestion">
-				<a href="../new_question" class="btn btn-primary btn-large pull-left" title="Cliquer ici pour créer une nouvelle question">Créer une nouvelle question</a>
+				<a href="../new_question" class="btn btn-primary btn-xs pull-left">Créer une nouvelle question</a>
 			</div>
 	
 			<h1 class="text-center"><small>Bienvenue {{user.username}}</small></h1>	
 		
 		</header>
-		
-			<div class="span6 text-center">
+			<aside class="col-md-4 col-lg-4">
+				<div class="row-fluid">
+
+					<div class="well" id="rechercheQuestion">
+						<h2>Rechercher une question :</h2>
+						<form method="POST">{% csrf_token %}
+							<input type="text" class="input-medium search-query">
+							<button type="submit" class="btn btn-primary">Rechercher</button>
+						</form>
+					</div>
+					
+					<div class="well" id="question">
+						<h2>Questions : </h2>
+							<ul id="listeQuestion" class="text-center">
+								{% for question in question_list %}
+									<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
+									{{ question.libelle }} </a> </li>
+									
+								{% endfor %}	
+							</ul>
+
+					</div>
+				</div>
+
+			</aside>
+			<div class="col-xs-offset-7 col-md-offset-7">
 
 				{% if question %}
 
@@ -57,30 +81,6 @@
 
 			</div>
 				
-			<aside class="col-md-4 col-lg-4">
-				<div class="row-fluid">
 
-					<div class="well" id="rechercheQuestion">
-						<h2>Rechercher une question :</h2>
-						<form method="POST">{% csrf_token %}
-							<input type="text" class="input-medium search-query">
-							<button type="submit" class="btn btn-primary">Rechercher</button>
-						</form>
-					</div>
-					
-					<div class="well" id="question">
-						<h2>Questions : </h2>
-							<ul id="listeQuestion" class="text-center">
-								{% for question in question_list %}
-									<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
-									{{ question.libelle }} </a> </li>
-									
-								{% endfor %}	
-							</ul>
-
-					</div>
-				</div>
-
-			</aside>
 	</body>
 </html>

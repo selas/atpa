@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Accueil ATPA</title>
+		<meta CHARSET="utf-8" />
+
+		<!-- Librairire bootstrap-->
+		{% load staticfiles %}
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
+		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
+		
+		<!--Autres-->
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
+		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
+		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+	</head>
+
+	<body>
+		<div class="container-fluid jumbotron">
+		<header id="coverHead">
+				<img id="ordi" src="../../static/appli/image/ordi.png" class="pull-left img-rounded">
+				<img id="tablette" src="../../static/appli/image/tablette.png" class="pull-left img-rounded">
+				<h1 class="col-xs-offset-1  col-xs-2" id="atpa">ATPA</h1>
+			</header>
+			<form class="form-inline pull-right" id="formconnexion" method="POST">
+				{% csrf_token %}
+				{{ form.username }}<br>
+				{{ form.password }}<br>
+				<button type="submit" title="Cliquer ici pour vous connecter" class="btn btn-primary btn-xs pull-right">Se connecter</button>
+			</form>
+			<img id="iut" src="../../static/appli/image/Logo-univ-orleans.png" class="pull-right">
+			
+		</div>
+		<!-- <div id="coEtu" class="text-center">	
+			<a class="btn btn-primary btn-lg text-center" href="../question_en_ligne" title="Cliquer ici pour commencer">Commencer</a>
+		</div>	 -->
+		
+		<div class="col-xs-offset-2 col-xs-8">
+			<p class="text-center lead">Utilisez vos équipements personnels
+				(téléphone, ordinateur, tablette) pour répondre aux questions posées.
+			</p>
+		</div>
+	</body>
+
+</html>
+
