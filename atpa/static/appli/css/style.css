@@ -43,7 +43,7 @@
 
 #afficherQuestion{
 	list-style: none;
-	margin-top:30%;
+	/*margin-top:30%;*/
 }
 
 #question{
@@ -65,7 +65,15 @@
 	margin-bottom:-5%;
 }
 
+#ordi{
+	width: 40%;
+	height: 40%;
+}
 
+#tablette{
+	width: 40%;
+	height: 40%;
+}
 
 h2{
 	font-size: 20px;	
