@@ -91,7 +91,7 @@ def affichageQuestion(request, question_id=None):
 
 		return render(request, 'appli/accueil.html', { 
 			'question_id': question_id, 'question': question, 'temps': temps,
-			 'maReponse': maReponse, 'question_list' : question_list
+		 	'maReponse': maReponse, 'question_list' : question_list
 			})
 		
 	else:
@@ -181,8 +181,13 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 
 			question_ligne = Question_ligne(question=question, dureeActivite=question.temps)
 			question_ligne.save()
+
 			reponses = Reponse.objects.filter(question=question_ligne.question)
-			return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
+
+			return render(request, 'appli/enseignant_question.html', { 
+				'question_ligne':question_ligne,
+			 	'reponses':reponses 
+			 	})
 
 		return redirect("accueil")
 	else:
@@ -207,7 +212,10 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 				if aware < dateFinished:
 
 					reponses = Reponse.objects.filter(question=question_ligne.question)
-					return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
+					return render(request, 'appli/enseignant_question.html', { 
+						'question_ligne':question_ligne,
+					 	'reponses':reponses
+					 	 })
 			
 		return render(request, 'appli/enseignant_question.html', {})
 
@@ -228,35 +236,24 @@ def reponse(request, question_ligne_id):
 		naive = datetime.utcnow()
 		aware = naive.replace(tzinfo=timezone.utc)
 
-		#Recupere le nombre d'enregistrement present dans la bdd 
-		#en fonction de l'utilisateur et de la question mise en ligne
-		reponse_ligne = Reponse_ligne.objects.filter(question=question_ligne, ip=ip).count()
+		if aware < dateFinished:
 
-		if reponse_ligne < 1:
+			#Recupere le nombre d'enregistrement present dans la bdd 
+			#en fonction de l'utilisateur et de la question mise en ligne
+			reponse_ligne = Reponse_ligne.objects.filter(question=question_ligne, ip=ip).count()
 
-
-			for item in request.POST:
-				if item != "csrfmiddlewaretoken":
-					idReponse = request.POST[item]
-
-					if aware < dateFinished:
+			if reponse_ligne < 1:
+				for item in request.POST:
+					if (item != "csrfmiddlewaretoken") and (item != "question"):
+						idReponse = request.POST[item]
 						reponses = Reponse.objects.filter(question=question_ligne.question)
 						reponse_ligne = Reponse_ligne(question=question_ligne, reponse=idReponse, ip=ip)
 						reponse_ligne.save()
-						
-					else : 
-						reponses = Reponse.objects.filter(question=question_ligne.question)
-						return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
+			else : 
+				error = "true"
+				return render(request, 'appli/enseignant_question.html', {'error':error})
 
 		return redirect("accueil")
-
-
-
-
-				
-
-
-		# return HttpResponse(str(idReponse))
 
 	return redirect("accueil") 
 
@@ -266,24 +263,4 @@ def IP():
     s.connect(('google.com', 0))
     return s.getsockname()[0]
 
-
-
-# def question_en_ligne(request):
-# 	#if request.method == 'POST' : 
-
-# 	if request.user.is_authenticated():
-
-# 		connecte = request.user
-# 		return render(request, 'appli/enseignant_question.html', {'connecte':connecte})
-
-# 	else:
-# 		connecte = None
-# 		question_posee = None # A modifier la prochaine fois
-# 		return render(request, 'appli/enseignant_question.html', {'connecte':connecte, 'question_posee':question_posee})
-
-		
-
-
-		
-		
-	
+# return HttpResponse(str(idReponse))
