@@ -16,8 +16,8 @@
 		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				$("input[name='champReponses_lib']").val() = ''
-				$("input[name='champReponses_bool']").val() = ''
+				$("input[name='champReponses_lib']").val("");
+				$("input[name='champReponses_bool']").val("");
 
 				var MAX_FIELDS = 9;
 				var fields = 1;
@@ -57,52 +57,50 @@
 	<body>
 		<section class="container-fluid">
 			<header class="page-header">
-				<a href="../accueil" title="cliquer ici pour revenir à l'acceuil">Accueil</a>
+				<a href="../accueil" title="Cliquer ici pour revenir à l'accueil">Accueil</a>
 			</header>
 
 			<form class="well" method="POST">{% csrf_token %}
 				<fieldset>
-					<legend>Création de question</legend>
+					<legend class="legend">Création de question</legend>
 					<div class="row">
-						<div class="col-md-3 col-sm-3 col-xs-2" >
+						<div class="col-sm-4 col-md-3 col-lg-3" >
 							{{ form.typeQuestion }}
 						</div>
 					</div>
 
-
-
 <!-- QUESTION -->
 					<div class="row">
-						<div class="col-md-3">
-							<section>
-								<br/>
-								<label for="id_intituleQuestion" title="Saisissez un intitulé de question">
-									Intitulé de la question :
-								</label>
-								{{ form.intituleQuestion }}
-								
-								<label for="id_temps" title="Saisissez une durée pour la question">
-									Durée (en secondes): 
-								</label>
-								{{ form.temps }}
-							</section>
+						<div class="col-sm-4 col-md-3 col-lg-3"><br/>
+							<label for="id_intituleQuestion" title="Saisissez un intitulé de question">Intitulé de la question :</label><br/>
+							{{ form.intituleQuestion }}
+						</div>
+					</div>
+
+<!-- TEMPS -->
+					<div class="row"><br/>
+						<div class="col-sm-4 col-md-3 col-lg-3">								
+							<label for="id_temps" title="Saisissez une durée pour la question">Durée (en secondes):</label><br/>
+							{{ form.temps }}
 						</div>
 					</div>
 
 <!-- REPONSES -->
-					<div id="reponses" class="row col-md-3">
-						<label for="reponses">Réponse(s) :</label><br>
-						<label>1<input type="text" name="reponse" class="reponse"><input class="large" type="checkbox" name="choix"></label>
+					<div id="reponses" class="row">
+						<div class="col-xs-7 col-sm-4 col-md-4 col-lg-3"><br/>
+							<label for="reponses">Réponse(s) :</label><br>
+							<label>1<input type="text" name="reponse" class="reponse"><input class="large" type="checkbox" name="choix"></label>
 
-						<br><input name="add" type="button" value="Ajouter" class="btn btn-primary btn-xs"/>
+							<br><input name="add" type="button" value="Ajouter une réponse" class="btn btn-primary btn-xs"/>
+						</div>
 					</div>
 
 <!-- CREATION -->
-					<section class="text-center">
-						<button name="submit" class="btn btn-primary btn-large" title="cliquer ici pour créer la question">
-							Créer
-						</button>
-					</section>
+					<div class="row">
+						<div class="col-sm-4 col-md-3 col-lg-3"><br/>
+							<button name="submit" class="btn btn-primary btn-large" title="cliquer ici pour créer la question">Créer la Question </button>
+						</div>
+					</div>
 				</fieldset>
 				<input name="champReponses_lib" type="hidden"/>
 				<input name="champReponses_bool" type="hidden"/>

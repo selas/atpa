@@ -13,7 +13,7 @@ class AjoutQuestion(forms.Form):
 	for monType in mesTypes :
 		CHOICES.append([monType.id, monType.libelle])
 
-	intituleQuestion = forms.CharField(widget = forms.Textarea(attrs = {'rows' : '2' ,'class':'special'}))
+	intituleQuestion = forms.CharField(widget = forms.Textarea(attrs = {'rows' : '3', 'style' : 'resize:vertical', 'class' : 'form-control'}))
 	
 	temps = forms.TimeField(label="Temps pour répondre", required=True, input_formats=("%M:%S",))
 
