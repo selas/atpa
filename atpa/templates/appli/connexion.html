@@ -10,55 +10,56 @@
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
 		
 		<!--Autres-->
-		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
 		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
+		<script type="text/javascript">
+			$(function(){
+				$('#enseignant').on('change' , function(){
+					var url = $(this).find('option:selected').first().attr("href");
+					//Test si il existe une URL
+					if(url){
+						window.location.href = url;
+					}
+				});
+			});
+		</script>
 	</head>
 
 	<body>
-	<div class="row">
-		<div class="col-xs-12 col-md-12 col-sm-12">
-			<header>
-				<div class="row jumbotron">
-					<img src="../../static/appli/image/ordi.png" class="col-xs-2 col-md-2 col-sm-2 pull-left img-rounded">
-					<img src="../../static/appli/image/tablette.png" class="pull-left img-rounded col-xs-2 col-md-2 col-sm-2">
-					<h1 class="  col-xs-2 col-md-offset-2  col-md-2">ATPA</h1>
-					<form class="  col-xs-12 col-md-offset-2  col-md-2" id="formconnexion" method="POST">
-						{% csrf_token %}
-						{{ form.username }}<br>
-						{{ form.password }}<br>
-						<button type="submit" title="Cliquer ici pour vous connecter" class="btn btn-primary btn-xs">Se connecter</button>
-					</form>
-					<img id="iut" src="../../static/appli/image/Logo-univ-orleans.png" class="col-xs-2 col-xs-offset-10 col-md-offset-6  col-md-2">
-				</div>
-			</header>
+		<div class="row">
+			<div class="col-xs-12 col-md-12 col-sm-12">
+				<header>
+					<div class="row jumbotron">
+						<img src="../../static/appli/image/ordi.png" class="col-xs-2 col-md-2 col-sm-2 pull-left img-rounded">
+						<img src="../../static/appli/image/tablette.png" class="pull-left img-rounded col-xs-2 col-md-2 col-sm-2">
+						<h1 class="  col-xs-2 col-md-offset-2  col-md-2">ATPA</h1>
+						<form class="  col-xs-12 col-md-offset-2  col-md-2" id="formconnexion" method="POST">
+							{% csrf_token %}
+							{{ form.username }}<br>
+							{{ form.password }}<br>
+							<button type="submit" title="Cliquer ici pour vous connecter" class="btn btn-primary btn-xs">Se connecter</button>
+						</form>
+						<img id="iut" src="../../static/appli/image/Logo-univ-orleans.png" class="col-xs-2 col-xs-offset-10 col-md-offset-6  col-md-2">
+					</div>
+				</header>
+			</div>
 		</div>
-	</div>
-
-
-
-
-
-
-
-
-
-
-
-
-		<div class="container-fluid ">
-		
+		<div class="col-lg-12 text-center">
 			
-			
+			<label>Enseignant</label>
+			<select id="enseignant">
+				<option>Sélectionnez l'enseignant</option> 	
+				{% for user in users %}
+					<option value="{{user.id}}" href="{% url 'question_reponse' enseignant_id=user.id %}">
+						{{user.last_name}} {{user.first_name}}
+					</option>
+				{% endfor %}
+			</select>
+
 		</div>
-		<!-- <div id="coEtu" class="text-center">	
-			<a class="btn btn-primary btn-lg text-center" href="../question_en_ligne" title="Cliquer ici pour commencer">Commencer</a>
-		</div>	 -->
-		
-		<div class="col-xs-offset-2 col-xs-8">
-			<p class="text-center lead">Utilisez vos équipements personnels
-				(téléphone, ordinateur, tablette) pour répondre aux questions posées.
-			</p>
+		<div class="col-xs-offset-2 col-xs-8 text-center">
+			<p class="lead">Utilisez vos équipements personnels	(téléphone, ordinateur, tablette) pour répondre aux questions posées.</p>
 		</div>
 	</body>
 

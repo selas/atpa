@@ -221,13 +221,8 @@
 
 	
 // }
-console.log('coucou');
 /* Ajoute une zone de saisie de réponse dans le champs Réponses Vraies */
-$("#choiceType").on("change", function(){
-	console.log('rrrrr');
-});
-console.log('coucou1');
-$("#reponse").html('rrrrrrrrrrr');
+
 // alert('coucou');
 //  Ajoute une zone de saisie de réponse dans le champs Réponses Vraies 
 // $("select[name='choiceType']").onChange(function(){

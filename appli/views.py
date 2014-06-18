@@ -2,23 +2,19 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User, Group
 from django.shortcuts import render_to_response, render, redirect
+from django.views.decorators.csrf import csrf_protect
+from django.db.models import Max
+from django.utils import timezone
 from appli.models import Question, Reponse, Question_ligne, Reponse_ligne, Type
 from appli.forms import Connexion, AjoutQuestion#, AfficheQuestion
-from django.views.decorators.csrf import csrf_protect
-
-from datetime import datetime 
-from django.db.models import Max
+from datetime import datetime, timedelta
 import socket
 import time
-from django.utils import timezone
-from datetime import datetime, timedelta
-
 import logging
 
 logger = logging.getLogger(__name__)
-
-#from django.contrib.auth.models import User
 
 
 @csrf_protect
@@ -33,28 +29,27 @@ def connexion(request):
 			if user.is_active:
 				login(request, user)
 				# Redirect to a success page.
-
 				return redirect("accueil") 
 
 			else:
 				# Return a 'disabled account' error message
-
 				return redirect(".")
 
 		else:
 			# Return an 'invalid login' error message.
-
 			return redirect('.')
 
 	else:
-		#Lorsque l'on click sur deconnexion, aucune methode post n'est passé
-		#Donc ensuite, on test si il existe un utilisateur ou non 
-		#Si un utilise existe, on le deconnecte 
-		#Puis on renvoi sur la page de connection
+		# Un formulaire vide
+		form = Connexion() 
+		#On recupere le group ayant pour nom enseignant
+		group = Group.objects.filter(name='enseignant' ) 
+		#On recupere les utilisateurs ayant pour group celui precedemment recupere
+		users = User.objects.filter(groups=group )
 
-		form = Connexion() # An unbound form
 		return render(request, 'appli/connexion.html', {
 			'form': form,
+			'users': users,
 			})
 
 
@@ -88,7 +83,7 @@ def affichageQuestion(request, question_id=None):
 
 		return render(request, 'appli/accueil.html', { 
 			'question_id': question_id, 'question': question, 'temps': temps,
-			 'maReponse': maReponse, 'question_list' : question_list
+		 	'maReponse': maReponse, 'question_list' : question_list
 			})
 		
 	else:
@@ -178,12 +173,14 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 
 			question_ligne = Question_ligne(question=question, dureeActivite=question.temps)
 			question_ligne.save()
+
 			reponses = Reponse.objects.filter(question=question_ligne.question)
 			
-			return render(request, 'appli/enseignant_question.html', {
+			return render(request, 'appli/enseignant_question.html', { 
 				'question_ligne':question_ligne,
-				'reponses':reponses
-				})
+			 	'reponses':reponses 
+			 	})
+
 
 		return redirect("accueil")
 	else:
@@ -208,7 +205,10 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 				if aware < dateFinished:
 
 					reponses = Reponse.objects.filter(question=question_ligne.question)
-					return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
+					return render(request, 'appli/enseignant_question.html', { 
+						'question_ligne':question_ligne,
+					 	'reponses':reponses
+					 	 })
 			
 		return render(request, 'appli/enseignant_question.html', {})
 
@@ -229,55 +229,27 @@ def reponse(request, question_ligne_id):
 		naive = datetime.utcnow()
 		aware = naive.replace(tzinfo=timezone.utc)
 
-		#Recupere le nombre d'enregistrement present dans la bdd 
-		#en fonction de l'utilisateur et de la question mise en ligne
-		reponse_ligne = Reponse_ligne.objects.filter(question=question_ligne, ip=ip).count()
+		if aware < dateFinished:
 
-		if reponse_ligne < 1:
+			#Recupere le nombre d'enregistrement present dans la bdd 
+			#en fonction de l'utilisateur et de la question mise en ligne
+			reponse_ligne = Reponse_ligne.objects.filter(question=question_ligne, ip=ip).count()
 
-
-			for item in request.POST:
-				if item != "csrfmiddlewaretoken":
-					idReponse = request.POST[item]
-
-					if aware < dateFinished:
+			if reponse_ligne < 1:
+				for item in request.POST:
+					if (item != "csrfmiddlewaretoken") and (item != "question"):
+						idReponse = request.POST[item]
 						reponses = Reponse.objects.filter(question=question_ligne.question)
 						reponse_ligne = Reponse_ligne(question=question_ligne, reponse=idReponse, ip=ip)
 						reponse_ligne.save()
-						
-					else : 
-						reponses = Reponse.objects.filter(question=question_ligne.question)
-						return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
+			else : 
+				error = "true"
+				return render(request, 'appli/enseignant_question.html', {'error':error})
 
-		return redirect("accueil")
-
-
-
-
-				
-
-
-		# return HttpResponse(str(idReponse))
-
-	return redirect("accueil")
+	return redirect("accueil") 
 
 
 def IP():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(('google.com', 0))
     return s.getsockname()[0]
-
-
-
-# def question_en_ligne(request):
-# 	#if request.method == 'POST' : 
-
-# 	if request.user.is_authenticated():
-
-# 		connecte = request.user
-# 		return render(request, 'appli/enseignant_question.html', {'connecte':connecte})
-
-# 	else:
-# 		connecte = None
-# 		question_posee = None # A modifier la prochaine fois
-# 		return render(request, 'appli/enseignant_question.html', {'connecte':connecte, 'question_posee':question_posee})

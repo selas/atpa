@@ -11,7 +11,7 @@ urlpatterns = patterns('',
 
 	#Lorsqu'un etudiant ou prof souhaite acceder a la reponse posée
 	url(r'^question/(?P<question_posee_id>\w{1,4})/$', 'appli.views.question_posee', name='question_posee'),
-	url(r'^question/enseignant/(?P<enseignant_id>\w{1,4})/$', 'appli.views.question_posee', name='question_posee'),
+	url(r'^enseignant/(?P<enseignant_id>\w{1,4})/reponse/$', 'appli.views.question_posee', name='question_reponse'),
 
 	# url(r'^question_posee/$', 'appli.views.question_posee', name='question_posee'),
 	url(r'^reponse/(?P<question_ligne_id>\w{1,4})/$', 'appli.views.reponse', name='reponse'),

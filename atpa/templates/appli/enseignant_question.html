@@ -12,6 +12,10 @@
 		<!--Autres-->
 		<script src='{% static "appli/bootstrap/js/styleSup.js" %}'></script>
 		<script src='{% static "appli/bootstrap/js/jquery.js" %}'></script>	
+		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+
+		<script type="text/javascript" src='{% static "appli/jquery-qrcode-master/jquery.qrcode.min.js" %}'></script>        
+
 
 <!-- Si l'utilisateur est connecté -->
 
@@ -25,9 +29,10 @@
 		<section class="container-fluid">
 			
 			<header class="page-header">
-				<a id="lien" href="enseignant_acceuil.html" title="cliquer ici pour revenir à l'acceuil Enseignant">Accueil Enseignant</a>
+				<a id="lien" href="{% url 'accueil' %}" title="cliquer ici pour revenir à l'acceuil Enseignant">Accueil</a>
 			</header>
 			
+			<div id="qrcode"></div>
 				<section id="question" class="container-fluid text-center ">
 				
 				<h1>{{question_ligne.question.libelle}}</h1>
@@ -70,15 +75,20 @@
 					<a href="acceuil.html" title="cliquer ici pour retourner à la page d'acceuil">Acceuil</a>
 				</header>
 			
-				<section id="question" class="container-fluid text-center">
+				<div id="question" class="text-center">
 					<br /> <br />
-					<span>{{ question_ligne.question.libelle }}</span>
+					<h3>{{ question_ligne.question.libelle }}</h3>
 					<br />
-				</section>
+				</div>
+
+				<div class="text-center">
+				
 				<form action="{% url 'reponse' question_ligne_id=question_ligne.id %}" method="POST">{% csrf_token %}
+
+					<input type="hidden" name="question" value="{{ question_ligne.question.id }}">
+
 					{% for reponse in reponses %}
 
-						<input type="hidden" name="question" value="{{ question_ligne.question.id }}">
 						{% if question_ligne.question.typeQuestion.libelle == "ouinon" %}
   							<input type="radio" name="reponse" id="{{ reponse.libelle }}" value="{{ reponse.id }}">
   							<label for="{{ reponse.libelle }}">{{ reponse.libelle }}</label><br>
@@ -95,14 +105,29 @@
 
 				</form>
 
+
 				
 					
 				
-			</section>
+			</div>
 		</body>
 
 
 			
+	{% elif error %}
+
+		</head>
+			<body>
+				<section class="container-fluid">
+					
+					<header class="page-header well">
+						<a href="/appli/accueil/" title="cliquer ici pour retourner à la page d'acceuil">Accueil</a>
+						<h1 class="text-center">Vous avez déjà répondu à cette question </h1>
+					</header>
+
+				</section>
+			</body>
+		
 	{% else %}
 
 		</head>
@@ -110,7 +135,7 @@
 				<section class="container-fluid">
 					
 					<header class="page-header well">
-						<a href="/appli/accueil/" title="cliquer ici pour retourner à la page d'acceuil">Acceuil</a>
+						<a href="/appli/accueil/" title="cliquer ici pour retourner à la page d'acceuil">Accueil</a>
 						<h1 class="text-center">Aucune question </h1>
 					</header>
 
@@ -120,4 +145,13 @@
 
 	{% endif %}
 {% endif %}
+<script>
+	var url = "{% url 'question_reponse' enseignant_id=user.id %}";
+	jQuery('#qrcode').qrcode({
+		width: 512,
+		height: 512,
+		render	: "canvas",
+		text	: url
+	});		
+</script>
 </html>

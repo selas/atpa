@@ -36,7 +36,7 @@ class Question_ligne(models.Model):
 	dureeActivite = models.TimeField("Temps pour répondre", max_length = 4)
 
 	def __unicode__(self):
-		return str(self.libelle)
+		return str(self.question)
 
 
 class Reponse_ligne(models.Model):
@@ -45,4 +45,4 @@ class Reponse_ligne(models.Model):
 	ip = models.CharField("L'adresse IP'", max_length = 39)
 
 	def __unicode__(self):
-		return str(self.libelle)
+		return str(self.question)
