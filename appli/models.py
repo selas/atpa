@@ -14,7 +14,7 @@ class Type(models.Model):
 class Question(models.Model):
 	enseignant = models.ForeignKey(User)
 	libelle = models.CharField("Votre question" , max_length = 250)
-	temps = models.IntegerField("Temps pour répondre" , max_length = 4)
+	temps = models.TimeField(blank=True, null=True)
 	typeQuestion = models.ForeignKey(Type)
 
 	def __unicode__(self):
@@ -33,7 +33,7 @@ class Reponse(models.Model):
 class Question_ligne(models.Model):
 	question = models.ForeignKey(Question)
 	dateDebut = models.DateTimeField("Date de dépôt de la question", default=datetime.now, blank=True)
-	dureeActivite = models.IntegerField("Temps pour répondre", max_length = 4)
+	dureeActivite = models.TimeField("Temps pour répondre", max_length = 4)
 
 	def __unicode__(self):
 		return str(self.libelle)

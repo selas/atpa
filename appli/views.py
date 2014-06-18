@@ -59,7 +59,6 @@ def connexion(request):
 
 
 def accueil(request):
-
 	if request.user.is_authenticated():
 
 			question_list = Question.objects.filter(enseignant=request.user)
@@ -70,13 +69,11 @@ def accueil(request):
 
 
 def deconnexion(request):
-
 	logout(request)
 	return redirect('connexion')
 
 
 def affichageQuestion(request, question_id=None):
-
 	if question_id:
 
 		maQuestion = Question.objects.get(pk=question_id)
@@ -114,7 +111,7 @@ def new_question(request):
 		libelle = request.POST['intituleQuestion']
 		enseignant = request.user
 		temps = request.POST['temps']
-		typeQuestion = request.POST['type_question']
+		typeQuestion = request.POST['typeQuestion']
 		monObjetType = Type.objects.get(pk=typeQuestion)
 
 		maQuestion = Question(enseignant = enseignant , libelle = libelle , temps = temps , typeQuestion = monObjetType)
@@ -182,7 +179,11 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 			question_ligne = Question_ligne(question=question, dureeActivite=question.temps)
 			question_ligne.save()
 			reponses = Reponse.objects.filter(question=question_ligne.question)
-			return render(request, 'appli/enseignant_question.html', { 'question_ligne':question_ligne, 'reponses':reponses })
+			
+			return render(request, 'appli/enseignant_question.html', {
+				'question_ligne':question_ligne,
+				'reponses':reponses
+				})
 
 		return redirect("accueil")
 	else:
@@ -280,10 +281,3 @@ def IP():
 # 		connecte = None
 # 		question_posee = None # A modifier la prochaine fois
 # 		return render(request, 'appli/enseignant_question.html', {'connecte':connecte, 'question_posee':question_posee})
-
-		
-
-
-		
-		
-	

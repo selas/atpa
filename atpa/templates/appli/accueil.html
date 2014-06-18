@@ -71,7 +71,14 @@
 							<p>Réponses possibles :
 								<ul>
 									{% for reponse in maReponse %}{{ question.id }}
-										<li>{{ reponse }}</li>
+										<li>{{ reponse.libelle }}
+										{% if reponse.reponseValide == True %}
+											Vrai
+										{% elif reponse.reponseValide == False %}
+											Faux
+										{% endif %}
+										</li>
+
 									{% endfor %}
 								</ul>
 							</p>

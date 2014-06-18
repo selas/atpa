@@ -16,16 +16,12 @@
 		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
+				$("input[name='champReponses_lib']").val() = ''
+				$("input[name='champReponses_bool']").val() = ''
 
 				var MAX_FIELDS = 9;
 				var fields = 1;
 				var insertion;
-
-				$('input[type="checkbox"].large').checkbox({
-				    buttonStyle: 'btn-link btn-large',
-				    checkedClass: 'icon-check',
-				    uncheckedClass: 'icon-check-empty'
-				});
 
 				$(":input[name='add']").click(function(e) {
 					e.preventDefault();
@@ -47,7 +43,6 @@
 					});
 
 					$("input[name='choix']").each(function(){
-						alert('lalalal');
 						if ($("input[name='champReponses_bool']").val() == "") {
 							$("input[name='champReponses_bool']").val($(this).prop('checked'));
 						}
@@ -69,14 +64,12 @@
 				<fieldset>
 					<legend>Création de question</legend>
 					<div class="row">
-						<div class="col-md-3">
-							<select class="form-control" name="type_question">
-							{% for type in types %}
-								<option value="{{ type.id }}">{{ type.libelle }}</option>
-							{% endfor %}
-							</select>
+						<div class="col-md-3 col-sm-3 col-xs-2" >
+							{{ form.typeQuestion }}
 						</div>
 					</div>
+
+
 
 <!-- QUESTION -->
 					<div class="row">
@@ -110,10 +103,10 @@
 							Créer
 						</button>
 					</section>
-					</fieldset>
-					<input name="champReponses_lib" type="hidden"/>
-					<input name="champReponses_bool" type="hidden"/>
-				</form>
+				</fieldset>
+				<input name="champReponses_lib" type="hidden"/>
+				<input name="champReponses_bool" type="hidden"/>
+			</form>
 		</section>
 	</body>
 </html>
