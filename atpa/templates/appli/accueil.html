@@ -12,6 +12,54 @@
 		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
 		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/js/typeahead.js" %}'></script>
+
+		<link rel="stylesheet" href='{% static "appli/css/typeahead.css" %}' media="screen" />
+
+		<script type="text/javascript">
+			$(function(){
+				var values = [];
+				{% for question in question_list %}
+					
+					values.push('{{ question.libelle }}')
+					
+				{% endfor %}	
+
+
+ 				var substringMatcher = function(strs) {
+				  	return function findMatches(q, cb) {
+					    var matches, substringRegex;
+					    // an array that will be populated with substring matches
+					    matches = [];
+					    // regex used to determine if a string contains the substring `q`
+					    substrRegex = new RegExp(q, 'i');
+					    // iterate through the pool of strings and for any string that
+					    // contains the substring `q`, add it to the `matches` array
+					    $.each(strs, function(i, str) {
+					      if (substrRegex.test(str)) {
+					        // the typeahead jQuery plugin expects suggestions to a
+					        // JavaScript object, refer to typeahead docs for more info
+					        matches.push({ value: str });
+					      }
+					    });
+					    cb(matches);
+				  	};
+				};
+
+
+				$('.typeahead').typeahead(null, {
+					name: 'questions',
+					source: substringMatcher(values)
+				});
+
+
+				
+			 
+				
+
+			});
+		</script>
+
 	</head>
 
 	<body>
@@ -34,7 +82,7 @@
 				<div class="well jumbotron" id="rechercheQuestion">
 					<h2>Rechercher une question</h2>
 					<form method="POST">{% csrf_token %}
-						<input type="text" class="input-medium search-query">
+						<input type="text" class="input-medium search-query typeahead">
 						<button type="submit" class="btn btn-primary">Rechercher</button>
 					</form>
 				</div>
@@ -60,15 +108,14 @@
 
 						<h1>{{ question }}</h1>
 						<p>Temps pour répondre : {{ temps }} secondes</p>
-						<p>Réponses possibles :
-							<ul>
-								{% for reponse in maReponse %}{{ question.id }}
-									<li>{{ reponse }}</li>
-								{% endfor %}
-							</ul>
-						</p>
-
+						<p>Réponses possibles : </p>
+						<ul>
+							{% for reponse in maReponse %}{{ question.id }}
+								<li>{{ reponse }}</li>
+							{% endfor %}
+						</ul>
 						<button type="submit" class="btn btn-primary">Charger la question</button>
+
 					</form>
 				</div>
 
