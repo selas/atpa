@@ -3,4 +3,5 @@
 *.pot
 *.pyc
 *.db
+atpa/atpa.db
 local_settings.py

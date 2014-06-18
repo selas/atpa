@@ -14,7 +14,7 @@ urlpatterns = patterns('',
 	url(r'^question/enseignant/(?P<enseignant_id>\w{1,4})/$', 'appli.views.question_posee', name='question_posee'),
 
 	# url(r'^question_posee/$', 'appli.views.question_posee', name='question_posee'),
-	url(r'^reponse/$', 'appli.views.reponse', name='reponse'),
+	url(r'^reponse/(?P<question_ligne_id>\w{1,4})/$', 'appli.views.reponse', name='reponse'),
 	url(r'^connexion/$', 'appli.views.connexion', name='connexion'),
 	url(r'^deconnexion/$', 'appli.views.deconnexion', name='deconnexion'),
 	url(r'^new_question/$', 'appli.views.new_question', name='new_question'),

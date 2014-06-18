@@ -19,17 +19,17 @@
 	<div class="row">
 		<div class="col-xs-12 col-md-12 col-sm-12">
 			<header>
-				<div class="row">
+				<div class="row jumbotron">
 					<img src="../../static/appli/image/ordi.png" class="col-xs-2 col-md-2 col-sm-2 pull-left img-rounded">
 					<img src="../../static/appli/image/tablette.png" class="pull-left img-rounded col-xs-2 col-md-2 col-sm-2">
-					<h1 class="col-xs-offset-2  col-xs-2 col-md-offset-2  col-md-2">ATPA</h1>
-					<form class="col-xs-offset-1  col-xs-2 col-md-offset-1  col-md-2" id="formconnexion" method="POST">
+					<h1 class="  col-xs-2 col-md-offset-2  col-md-2">ATPA</h1>
+					<form class="  col-xs-12 col-md-offset-2  col-md-2" id="formconnexion" method="POST">
 						{% csrf_token %}
 						{{ form.username }}<br>
 						{{ form.password }}<br>
 						<button type="submit" title="Cliquer ici pour vous connecter" class="btn btn-primary btn-xs">Se connecter</button>
 					</form>
-					<img id="iut" src="../../static/appli/image/Logo-univ-orleans.png" class="col-xs-2 col-md-offset-6  col-md-2">
+					<img id="iut" src="../../static/appli/image/Logo-univ-orleans.png" class="col-xs-2 col-xs-offset-10 col-md-offset-6  col-md-2">
 				</div>
 			</header>
 		</div>
@@ -46,7 +46,7 @@
 
 
 
-		<div class="container-fluid jumbotron">
+		<div class="container-fluid ">
 		
 			
 			

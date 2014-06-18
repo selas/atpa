@@ -75,8 +75,7 @@
 					<span>{{ question_ligne.question.libelle }}</span>
 					<br />
 				</section>
-				
-				<form action="{% url 'reponse' %}" method="POST">{% csrf_token %}
+				<form action="{% url 'reponse' question_ligne_id=question_ligne.id %}" method="POST">{% csrf_token %}
 					{% for reponse in reponses %}
 
 						<input type="hidden" name="question" value="{{ question_ligne.question.id }}">
