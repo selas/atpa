@@ -70,31 +70,32 @@
 					<a href="acceuil.html" title="cliquer ici pour retourner à la page d'acceuil">Acceuil</a>
 				</header>
 			
-				<section id="question" class="container-fluid text-center">
+				<div id="question" class="text-center">
 					<br /> <br />
-					<span>{{ question_ligne.question.libelle }}</span>
+					<h3>{{ question_ligne.question.libelle }}</h3>
 					<br />
-				</section>
-				<form action="{% url 'reponse' question_ligne_id=question_ligne.id %}" method="POST">{% csrf_token %}
-					{% for reponse in reponses %}
+				</div>
+				<div class="text-center">
+					<form action="{% url 'reponse' question_ligne_id=question_ligne.id %}" method="POST">{% csrf_token %}
+						{% for reponse in reponses %}
 
-						<input type="hidden" name="question" value="{{ question_ligne.question.id }}">
-						{% if question_ligne.question.typeQuestion.libelle == "ouinon" %}
-  							<input type="radio" name="reponse" id="{{ reponse.libelle }}" value="{{ reponse.id }}">
-  							<label for="{{ reponse.libelle }}">{{ reponse.libelle }}</label><br>
-						{% elif question_ligne.question.typeQuestion.libelle == "saisie" %}
-							<input type="textarea" name="reponse"><br />
-						{% elif question_ligne.question.typeQuestion.libelle == "choixMultiple" %}
-							<input type="checkbox" name="{{ reponse.libelle }}" id="{{ reponse.libelle }}" value="{{ reponse.id }}"/> 
-							<label for="{{ reponse.libelle }}">{{ reponse.libelle }}</label><br />
-						{% endif %}
+							<input type="hidden" name="question" value="{{ question_ligne.question.id }}">
+							{% if question_ligne.question.typeQuestion.libelle == "ouinon" %}
+	  							<input type="radio" name="reponse" id="{{ reponse.libelle }}" value="{{ reponse.id }}">
+	  							<label for="{{ reponse.libelle }}">{{ reponse.libelle }}</label><br>
+							{% elif question_ligne.question.typeQuestion.libelle == "saisie" %}
+								<input type="textarea" name="reponse"><br />
+							{% elif question_ligne.question.typeQuestion.libelle == "choixMultiple" %}
+								<input type="checkbox" name="{{ reponse.libelle }}" id="{{ reponse.libelle }}" value="{{ reponse.id }}"/> 
+								<label for="{{ reponse.libelle }}">{{ reponse.libelle }}</label><br />
+							{% endif %}
 
-					{% endfor %}
+						{% endfor %}
 
-					<button  type="submit" class="btn btn-primary ">Valider</button>
+						<button  type="submit" class="btn btn-primary ">Valider</button>
 
-				</form>
-
+					</form>
+				</div>
 				
 					
 				
