@@ -21,6 +21,12 @@
 				var fields = 1;
 				var insertion;
 
+				$('input[type="checkbox"].large').checkbox({
+				    buttonStyle: 'btn-link btn-large',
+				    checkedClass: 'icon-check',
+				    uncheckedClass: 'icon-check-empty'
+				});
+
 				$(":input[name='add']").click(function(e) {
 					e.preventDefault();
 					if (fields < MAX_FIELDS) {
@@ -93,7 +99,7 @@
 <!-- REPONSES -->
 					<div id="reponses" class="row col-md-3">
 						<label for="reponses">Réponse(s) :</label><br>
-						<label>1<input type="text" name="reponse" class="reponse"><input class="increase" type="checkbox" name="choix"></label>
+						<label>1<input type="text" name="reponse" class="reponse"><input class="large" type="checkbox" name="choix"></label>
 
 						<br><input name="add" type="button" value="Ajouter" class="btn btn-primary btn-xs"/>
 					</div>
