@@ -46,4 +46,3 @@ class Reponse_ligne(models.Model):
 
 	def __unicode__(self):
 		return str(self.question)
-

@@ -116,7 +116,7 @@ def new_question(request):
 		temps = request.POST['temps']
 		typeQuestion = request.POST['type_question']
 		monObjetType = Type.objects.get(pk=typeQuestion)
-		
+
 		maQuestion = Question(enseignant = enseignant , libelle = libelle , temps = temps , typeQuestion = monObjetType)
 		maQuestion.save()
 
@@ -150,7 +150,7 @@ def new_question(request):
 		# Redirect to a success page.
 		question_list = Question.objects.filter(enseignant=request.user)
 		return render(request, 'appli/accueil.html' , {'question_list' : question_list, 'enseignant' : enseignant , 'libelle' : libelle , 'temps' : temps , 'typeReponse' :'Choix simple' })
-		
+
 	else:
 		types = Type.objects.all()
 		form = AjoutQuestion() # An unbound form
@@ -252,8 +252,6 @@ def reponse(request, question_ligne_id):
 			else : 
 				error = "true"
 				return render(request, 'appli/enseignant_question.html', {'error':error})
-
-		return redirect("accueil")
 
 	return redirect("accueil") 
 
