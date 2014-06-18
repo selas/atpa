@@ -105,15 +105,24 @@
 			{% if question %}
 				<div id="afficherQuestion">
 					<form method="POST" action="/appli/question/{{ question_id }}/">{% csrf_token %}
-
 						<h1>{{ question }}</h1>
 						<p>Temps pour répondre : {{ temps }} secondes</p>
-						<p>Réponses possibles : </p>
-						<ul>
-							{% for reponse in maReponse %}{{ question.id }}
-								<li>{{ reponse }}</li>
-							{% endfor %}
-						</ul>
+
+						<p>Réponses possibles :
+							<ul>
+								{% for reponse in maReponse %}{{ question.id }}
+									<li>{{ reponse.libelle }}
+									{% if reponse.reponseValide == True %}
+										Vrai
+									{% elif reponse.reponseValide == False %}
+										Faux
+									{% endif %}
+									</li>
+
+								{% endfor %}
+							</ul>
+						</p>
+
 						<button type="submit" class="btn btn-primary">Charger la question</button>
 
 					</form>
@@ -125,6 +134,5 @@
 			{% endif %}
 
 		</div>
-
 	</body>
 </html>
