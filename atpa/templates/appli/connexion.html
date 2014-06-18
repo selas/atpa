@@ -10,9 +10,9 @@
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
 		
 		<!--Autres-->
-		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
 		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 	</head>
 
 	<body>
@@ -33,6 +33,17 @@
 					</div>
 				</header>
 			</div>
+		</div>
+		<div>
+			<form action="#" method="POST">
+				<label>Enseignant</label>
+				<select id="enseignant">
+					{% for enseignant in enseignants %}
+						<option value="{{enseignant.id}}">{{enseignant.last_name}} {{enseignant.first_name}}</option>
+					{% endfor %}
+				</select>
+				<button type="submit">Validez</button>
+			</form>
 		</div>
 		<div class="col-xs-offset-2 col-xs-8">
 			<p class="text-center lead">Utilisez vos équipements personnels	(téléphone, ordinateur, tablette) pour répondre aux questions posées.</p>

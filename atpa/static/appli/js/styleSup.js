@@ -221,13 +221,13 @@
 
 	
 // }
-console.log('coucou');
 /* Ajoute une zone de saisie de réponse dans le champs Réponses Vraies */
-$("#choiceType").on("change", function(){
-	console.log('rrrrr');
+$(function(){
+	$('#enseignant').on('change' , function(){
+		var id_ens = $(this).find('option:selected').val();
+		window.location.href = "{% url 'question_posee' enseignant_id = id_ens %}";
+	});
 });
-console.log('coucou1');
-$("#reponse").html('rrrrrrrrrrr');
 // alert('coucou');
 //  Ajoute une zone de saisie de réponse dans le champs Réponses Vraies 
 // $("select[name='choiceType']").onChange(function(){
