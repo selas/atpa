@@ -28,65 +28,57 @@
 			<h1 class="text-center"><small>Bienvenue {{user.username}}</small></h1>	
 		
 		</header>
-			<aside class="col-md-4 col-lg-4">
-				<div class="row-fluid">
+		<aside class="col-md-4 col-lg-4">
+			<div class="row-fluid">
 
-					<div class="well jumbotron" id="rechercheQuestion">
-						<h2>Rechercher une question</h2>
-						<form method="POST">{% csrf_token %}
-							<input type="text" class="input-medium search-query">
-							<button type="submit" class="btn btn-primary">Rechercher</button>
-						</form>
-					</div>
-					
-					<div class="well jumbotron" id="question">
-						<h2>Questions</h2>
-							<ul id="listeQuestion" class="text-center">
-								{% for question in question_list %}
-									<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
-									{{ question.libelle }} </a> </li>
-									
-								{% endfor %}	
+				<div class="well jumbotron" id="rechercheQuestion">
+					<h2>Rechercher une question</h2>
+					<form method="POST">{% csrf_token %}
+						<input type="text" class="input-medium search-query">
+						<button type="submit" class="btn btn-primary">Rechercher</button>
+					</form>
+				</div>
+				
+				<div class="well jumbotron" id="question">
+					<h2>Questions</h2>
+						<ul id="listeQuestion" class="text-center">
+							{% for question in question_list %}
+								<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
+								{{ question.libelle }} </a> </li>
+								
+							{% endfor %}	
+						</ul>
+
+				</div>
+			</div>
+
+		</aside>
+		<div class="col-xs-offset-2 col-md-offset-7">				
+			{% if question %}
+				<div id="afficherQuestion">
+					<form method="POST" action="/appli/question/{{ question_id }}/">{% csrf_token %}
+
+						<h1>{{ question }}</h1>
+						<p>Temps pour répondre : {{ temps }} secondes</p>
+						<p>Réponses possibles :
+							<ul>
+								{% for reponse in maReponse %}{{ question.id }}
+									<li>{{ reponse }}</li>
+								{% endfor %}
 							</ul>
+						</p>
 
-					</div>
+						<button type="submit" class="btn btn-primary">Charger la question</button>
+					</form>
 				</div>
 
-			</aside>
-			<div class="col-xs-offset-7 col-md-offset-7">
-			<canvas>
-							<div id="qrcode">skf</div>	
-							<script>
-								// jquery('#qrcode').qrcode("this plugin is great");
-								jquery('#qrcode').qrcode({width: 80,height: 80,text: "size doesn't matter"});</script>
-							
-			</canvas>								
-				{% if question %}
+			{% else %}
 
-					<div id="afficherQuestion">
-						<form method="POST" action="/appli/question/{{ question_id }}/">{% csrf_token %}
+				
 
-							<h1>{{ question }}</h1>
-							<p>Temps pour répondre : {{ temps }} secondes</p>
-							<p>Réponses possibles :
-								<ul>
-									{% for reponse in maReponse %}{{ question.id }}
-										<li>{{ reponse }}</li>
-									{% endfor %}
-								</ul>
-							</p>
+			{% endif %}
 
-							<button type="submit" class="btn btn-primary">Charger la question</button>
-						</form>
-					</div>
-
-				{% else %}
-
-					
-
-				{% endif %}
-
-			</div>
+		</div>
 				
 
 	</body>
