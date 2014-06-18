@@ -2,23 +2,19 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User, Group
 from django.shortcuts import render_to_response, render, redirect
+from django.views.decorators.csrf import csrf_protect
+from django.db.models import Max
+from django.utils import timezone
 from appli.models import Question, Reponse, Question_ligne, Reponse_ligne, Type
 from appli.forms import Connexion, AjoutQuestion#, AfficheQuestion
-from django.views.decorators.csrf import csrf_protect
-
-from datetime import datetime 
-from django.db.models import Max
+from datetime import datetime, timedelta
 import socket
 import time
-from django.utils import timezone
-from datetime import datetime, timedelta
-
 import logging
 
 logger = logging.getLogger(__name__)
-
-#from django.contrib.auth.models import User
 
 
 @csrf_protect
@@ -33,28 +29,27 @@ def connexion(request):
 			if user.is_active:
 				login(request, user)
 				# Redirect to a success page.
-
 				return redirect("accueil") 
 
 			else:
 				# Return a 'disabled account' error message
-
 				return redirect(".")
 
 		else:
 			# Return an 'invalid login' error message.
-
 			return redirect('.')
 
 	else:
-		#Lorsque l'on click sur deconnexion, aucune methode post n'est passé
-		#Donc ensuite, on test si il existe un utilisateur ou non 
-		#Si un utilise existe, on le deconnecte 
-		#Puis on renvoi sur la page de connection
+		# Un formulaire vide
+		form = Connexion() 
+		#On recupere le group ayant pour nom enseignant
+		group = Group.objects.filter(name='enseignant' ) 
+		#On recupere les utilisateurs ayant pour group celui precedemment recupere
+		users = User.objects.filter(groups=group )
 
-		form = Connexion() # An unbound form
 		return render(request, 'appli/connexion.html', {
 			'form': form,
+			'users': users,
 			})
 
 

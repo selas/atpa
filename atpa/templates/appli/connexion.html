@@ -10,9 +10,20 @@
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
 		
 		<!--Autres-->
-		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
 		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
+		<script type="text/javascript">
+			$(function(){
+				$('#enseignant').on('change' , function(){
+					var url = $(this).find('option:selected').first().attr("href");
+					//Test si il existe une URL
+					if(url){
+						window.location.href = url;
+					}
+				});
+			});
+		</script>
 	</head>
 
 	<body>
@@ -34,8 +45,21 @@
 				</header>
 			</div>
 		</div>
-		<div class="col-xs-offset-2 col-xs-8">
-			<p class="text-center lead">Utilisez vos équipements personnels	(téléphone, ordinateur, tablette) pour répondre aux questions posées.</p>
+		<div class="col-lg-12 text-center">
+			
+			<label>Enseignant</label>
+			<select id="enseignant">
+				<option>Sélectionnez l'enseignant</option> 	
+				{% for user in users %}
+					<option value="{{user.id}}" href="{% url 'question_reponse' enseignant_id=user.id %}">
+						{{user.last_name}} {{user.first_name}}
+					</option>
+				{% endfor %}
+			</select>
+
+		</div>
+		<div class="col-xs-offset-2 col-xs-8 text-center">
+			<p class="lead">Utilisez vos équipements personnels	(téléphone, ordinateur, tablette) pour répondre aux questions posées.</p>
 		</div>
 	</body>
 
