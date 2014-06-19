@@ -7,14 +7,12 @@
 		{% load staticfiles %}
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
+		<link rel="stylesheet" href='{% static "appli/css/typeahead.css" %}' media="screen" />
 		<!--Autres-->
 		<script type="text/javascript" src='{% static "appli/jquery-qrcode-master/src/jquery.qrcode.min.js" %}'></script>
-		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
 		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
 		<script type="text/javascript" src='{% static "appli/js/typeahead.js" %}'></script>
-
-		<link rel="stylesheet" href='{% static "appli/css/typeahead.css" %}' media="screen" />
 
 		<script type="text/javascript">
 			$(function(){
@@ -46,93 +44,75 @@
 				  	};
 				};
 
-
 				$('.typeahead').typeahead(null, {
 					name: 'questions',
 					source: substringMatcher(values)
 				});
-
-
-				
-			 
-				
-
 			});
 		</script>
-
 	</head>
 
 	<body>
 		<header class="jumbotron">
-			<div class="deconnexion">
-				<a href="/appli/deconnexion" class="btn btn-danger btn-xs pull-right" >
-					Déconnexion <span class="icon-white icon-off"></span>
-				</a>
+			<div class="row">
+					<a href="/appli/deconnexion" class="btn btn-danger btn-xs pull-right" >
+						Déconnexion <span class="icon-white icon-off"></span>
+					</a>
+
+					<a href="{% url 'new_question' %}" class="btn btn-primary btn-xs pull-left">Créer une nouvelle question</a>
 			</div>
-			<div id="newQuestion">
-				<a href="{% url 'new_question' %}" class="btn btn-primary btn-xs pull-left">Créer une nouvelle question</a>
+
+			<div class="row text-center">
+				<h1 class="text-center"><small>Bienvenue {{user.username}}</small></h1>	
 			</div>
-	
-			<h1 class="text-center"><small>Bienvenue {{user.username}}</small></h1>	
+
 		
 		</header>
-		<aside class="col-md-4 col-lg-4">
-			<div class="row-fluid">
+		<div class="container theme-showcase">			
+			<div class="jumbotron col-md-6 col-sm-7" id="question">
+				<h3>Rechercher une question</h3>
+				<form method="POST">{% csrf_token %}
+					<input type="text" class="input-medium search-query typeahead">
+					<button type="submit" class="btn btn-primary">Rechercher</button>
+				</form>
 
-				<div class="well jumbotron" id="rechercheQuestion">
-					<h2>Rechercher une question</h2>
-					<form method="POST">{% csrf_token %}
-						<input type="text" class="input-medium search-query typeahead">
-						<button type="submit" class="btn btn-primary">Rechercher</button>
-					</form>
-				</div>
-				
-				<div class="well jumbotron" id="question">
-					<h2>Questions</h2>
-						<ul id="listeQuestion" class="text-center">
-							{% for question in question_list %}
-								<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
-								{{ question.libelle }} </a> </li>
-								
-							{% endfor %}	
-						</ul>
-
-				</div>
+				<h3>Questions</h3>
+				<ul id="listeQuestion" class="list-unstyled">
+					{% for question in question_list %}
+						<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
+						{{ question.libelle }} </a> </li>
+						
+					{% endfor %}
+				</ul>
 			</div>
 
-		</aside>
-		<div class="col-xs-offset-2 col-md-offset-7">				
-			{% if question %}
-				<div id="afficherQuestion">
-					<form method="POST" action="/appli/question/{{ question_id }}/">{% csrf_token %}
-						<h1>{{ question }}</h1>
-						<p>Temps pour répondre : {{ temps }} secondes</p>
+			{% if question %}			
+			<div class="col-md-5 col-md-offset-1 col-sm-4 col-sm-offset-1 well" id="afficherQuestion">
+				<form method="POST" action="/appli/question/{{ question_id }}/">{% csrf_token %}
+					<b>{{ question }}</b>
+					<p>Temps pour répondre : {{ temps }} secondes</p>
 
-						<p>Réponses possibles :
-							<ul>
-								{% for reponse in maReponse %}{{ question.id }}
-									<li>{{ reponse.libelle }}
-									{% if reponse.reponseValide == True %}
-										Vrai
-									{% elif reponse.reponseValide == False %}
-										Faux
-									{% endif %}
-									</li>
+					<p>Réponses possibles :
+						<ul>
+							{% for reponse in maReponse %}{{ question.id }}
+								<li>{{ reponse.libelle }}
+								{% if reponse.reponseValide == True %}
+									Vrai
+								{% elif reponse.reponseValide == False %}
+									Faux
+								{% endif %}
+								</li>
 
-								{% endfor %}
-							</ul>
-						</p>
-
+							{% endfor %}
+						</ul>
+					</p>
+					<div class="text-center">
 						<button type="submit" class="btn btn-primary">Charger la question</button>
-
-					</form>
-				</div>
-
+					</div>
+				</form>
+			</div>
 			{% else %}
-
-		
 			{% endif %}
-
 		</div>
 	</body>
 </html>
