@@ -99,7 +99,7 @@
 			{% if question %}			
 				<div class="col-md-6 col-md-offset-1 col-sm-5 col-sm-offset-1 well" id="afficherQuestion">
 					<form method="POST" action="{% url 'question_posee' question_posee_id=question_id %}">{% csrf_token %}
-						<h3><b>{{ question }}</b></h3>
+						<b>{{ question }}</b>
 						<p>Temps pour répondre : {{ temps }} secondes</p>
 
 						<p>Réponses possibles :
