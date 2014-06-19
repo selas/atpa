@@ -47,11 +47,13 @@
 					$("input[name='temps']").val(heure +':'+ minute +':'+ seconde);
 
 					$("input[name='reponse']").each(function(){
-						if ($("input[name='champReponses_lib']").val() == "") {
-							$("input[name='champReponses_lib']").val($("input[name='reponse']:first").val());
-						}
-						else {
-							$("input[name='champReponses_lib']").val($("input[name='champReponses_lib']").val() +"|"+ $(this).val());
+						if ($(this).val() != "") {
+							if ($("input[name='champReponses_lib']").val() == "") {
+								$("input[name='champReponses_lib']").val($("input[name='reponse']:first").val());
+							}
+							else {
+								$("input[name='champReponses_lib']").val($("input[name='champReponses_lib']").val() +"|"+ $(this).val());
+							}
 						}
 					});
 
@@ -101,7 +103,6 @@
 							{{ form.listeSeconde }}
 						</div>
 					</div>
-
 
 <!-- REPONSES QUESTION -->
 					<div id="reponses" class="row">

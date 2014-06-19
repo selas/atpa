@@ -110,34 +110,28 @@ def new_question(request):
 		monObjetType = Type.objects.get(pk=typeQuestion)
 
 		maQuestion = Question(enseignant = enseignant , libelle = libelle , temps = temps , typeQuestion = monObjetType)
-		maQuestion.save()
-
-		# REPONSES
 		listeReponses_lib = request.POST['champReponses_lib']
-		listeReponses_bool = request.POST['champReponses_bool']
-		logger.error(listeReponses_lib)
-		idQuestion = maQuestion.id
-		monObjetQuestion = Question.objects.get(pk=idQuestion)
+		if not "||" in listeReponses_lib :
+			maQuestion.save()
 
-		champReponsesSplit_lib = listeReponses_lib.split('|')
-		champReponsesSplit_bool = listeReponses_bool.split('|')
+			# REPONSES
+			listeReponses_lib = request.POST['champReponses_lib']
+			listeReponses_bool = request.POST['champReponses_bool']
 
-		logger.error(len(champReponsesSplit_lib))
+			idQuestion = maQuestion.id
+			monObjetQuestion = Question.objects.get(pk=idQuestion)
 
-		logger.error(champReponsesSplit_lib)
-		logger.error(champReponsesSplit_bool)
+			champReponsesSplit_lib = listeReponses_lib.split('|')
+			champReponsesSplit_bool = listeReponses_bool.split('|')
 
-		for i in range(0,len(champReponsesSplit_lib)):
-			logger.error(champReponsesSplit_lib[i])
-			logger.error(champReponsesSplit_bool[i])
+			for i in range(0,len(champReponsesSplit_lib)):
+				if champReponsesSplit_bool[i] == 'true' :
+					champReponsesSplit_bool[i] = True
+				else :
+					champReponsesSplit_bool[i] = False
 
-			if champReponsesSplit_bool[i] == 'true' :
-				champReponsesSplit_bool[i] = True
-			else :
-				champReponsesSplit_bool[i] = False
-
-			maReponse = Reponse(question = monObjetQuestion, libelle = champReponsesSplit_lib[i] , reponseValide = champReponsesSplit_bool[i])
-			maReponse.save()
+				maReponse = Reponse(question = monObjetQuestion, libelle = champReponsesSplit_lib[i] , reponseValide = champReponsesSplit_bool[i])
+				maReponse.save()
 
 		# Redirect to a success page.
 		question_list = Question.objects.filter(enseignant=request.user)
