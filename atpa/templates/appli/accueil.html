@@ -21,29 +21,29 @@
 				var values = [];
 				{% for question in question_list %}
 					
-					values.push('{{ question.libelle }}')
+					values.push({id:'{{question.id}}', libelle:'{{ question.libelle }}');
 					
 				{% endfor %}	
 
 
- 				var substringMatcher = function(strs) {
-				  	return function findMatches(q, cb) {
-					    var matches, substringRegex;
-					    // an array that will be populated with substring matches
-					    matches = [];
-					    // regex used to determine if a string contains the substring `q`
-					    substrRegex = new RegExp(q, 'i');
-					    // iterate through the pool of strings and for any string that
-					    // contains the substring `q`, add it to the `matches` array
-					    $.each(strs, function(i, str) {
-					      if (substrRegex.test(str)) {
-					        // the typeahead jQuery plugin expects suggestions to a
-					        // JavaScript object, refer to typeahead docs for more info
-					        matches.push({ value: str });
-					      }
-					    });
-					    cb(matches);
-				  	};
+				var substringMatcher = function(strs) {
+					return function findMatches(q, cb) {
+
+						// an array that will be populated with substring matches
+						var matches = [];
+						// regex used to determine if a string contains the substring `q`
+						var substrRegex = new RegExp(q, 'i');
+						// iterate through the pool of strings and for any string that
+						// contains the substring `q`, add it to the `matches` array
+						$.each(strs, function(i, str) {
+						  if (substrRegex.test(str)) {
+							// the typeahead jQuery plugin expects suggestions to a
+							// JavaScript object, refer to typeahead docs for more info
+							matches.push({ value: str });
+						  }
+						});
+						cb(matches);
+					};
 				};
 
 
@@ -52,7 +52,25 @@
 					source: substringMatcher(values)
 				});
 
+				$("form[name='rechercher']").submit(function(e){
+					e.preventDefault();
+					var caracter = $(".typeahead").eq(1).typeahead('val');
+					var matches = [];
+					var substrRegex = new RegExp(caracter, 'i');
+					for (var i=0; i<values.length; i++) {
+						if (substrRegex.test(values[i])) {
+							matches.push(values[i]);
+						}
+					};
+					console.log(matches);
 
+					for (var i=0; i<matches.length; i++) {
+						$("ul#listeQuestion").append("<li><a href=\"{% 'affichageQuestion' question_id={{question.id}} %}\" title=\"cliquer ici pour accéder à la question\">
+										{{ question.libelle }} 
+									</a> </li>");
+					};
+					
+				});
 				
 			 
 				
@@ -81,7 +99,7 @@
 
 				<div class="well jumbotron" id="rechercheQuestion">
 					<h2>Rechercher une question</h2>
-					<form method="POST">{% csrf_token %}
+					<form name="rechercher" method="POST">{% csrf_token %}
 						<input type="text" class="input-medium search-query typeahead">
 						<button type="submit" class="btn btn-primary">Rechercher</button>
 					</form>
@@ -91,8 +109,11 @@
 					<h2>Questions</h2>
 						<ul id="listeQuestion" class="text-center">
 							{% for question in question_list %}
-								<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
-								{{ question.libelle }} </a> </li>
+								<li>
+									<a href="{% 'affichageQuestion' question_id={{question.id}} %}" title="cliquer ici pour accéder à la question">
+										{{ question.libelle }} 
+									</a>
+								</li>
 								
 							{% endfor %}	
 						</ul>
