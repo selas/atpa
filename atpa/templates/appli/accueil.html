@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/css/typeahead.css" %}' media="screen" />
+		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
 		<!--Autres-->
 		<script type="text/javascript" src='{% static "appli/jquery-qrcode-master/src/jquery.qrcode.min.js" %}'></script>
 		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
@@ -19,26 +20,22 @@
 				var values = [];
 				{% for question in question_list %}
 					
-					values.push({id:'{{question.id}}', libelle:'{{ question.libelle }}');
+					values.push({
+						id:'{{question.id}}',
+						libelle:'{{ question.libelle }}',
+						href:"{% url 'affichageQuestion' question_id=question.id %}"
+					});
 					
 				{% endfor %}	
 
-
 				var substringMatcher = function(strs) {
 					return function findMatches(q, cb) {
-
-						// an array that will be populated with substring matches
 						var matches = [];
-						// regex used to determine if a string contains the substring `q`
 						var substrRegex = new RegExp(q, 'i');
-						// iterate through the pool of strings and for any string that
-						// contains the substring `q`, add it to the `matches` array
 						$.each(strs, function(i, str) {
-						  if (substrRegex.test(str)) {
-							// the typeahead jQuery plugin expects suggestions to a
-							// JavaScript object, refer to typeahead docs for more info
-							matches.push({ value: str });
-						  }
+						  	if (substrRegex.test(str['libelle'])) {
+								matches.push({ value: str['libelle'] });
+						  	}
 						});
 						cb(matches);
 					};
@@ -49,28 +46,18 @@
 					source: substringMatcher(values)
 				});
 
-
-				$("form[name='rechercher']").submit(function(e){
+				$(".typeahead").on("keyup", function(e){
 					e.preventDefault();
 					var caracter = $(".typeahead").eq(1).typeahead('val');
 					var matches = [];
 					var substrRegex = new RegExp(caracter, 'i');
-					for (var i=0; i<values.length; i++) {
-						if (substrRegex.test(values[i])) {
-							matches.push(values[i]);
+					$("ul#listeQuestion").html("");
+					for (var i=0; i<=values.length-1; i++) {
+						if (substrRegex.test(values[i]["libelle"])) {
+							$("ul#listeQuestion").append("<li><a href=\""+values[i]["href"]+"\" title=\"cliquer ici pour accéder à la question\">"+values[i]["libelle"]+"</a></li>");
 						}
 					};
-					console.log(matches);
-
-					for (var i=0; i<matches.length; i++) {
-						$("ul#listeQuestion").append("<li><a href=\"{% 'affichageQuestion' question_id={{question.id}} %}\" title=\"cliquer ici pour accéder à la question\">
-										{{ question.libelle }} 
-									</a> </li>");
-					};
-					
 				});
-				
-			 
 				
 			});
 		</script>
@@ -79,64 +66,58 @@
 	<body>
 		<header class="jumbotron">
 			<div class="row">
-					<a href="/appli/deconnexion" class="btn btn-danger btn-xs pull-right" >
-						Déconnexion <span class="icon-white icon-off"></span>
-					</a>
-
-					<a href="{% url 'new_question' %}" class="btn btn-primary btn-xs pull-left">Créer une nouvelle question</a>
+				<a href="{% url 'new_question' %}" class="btn btn-primary btn-xs pull-left">
+					<span class="glyphicon glyphicon-pencil"></span> Nouvelle question
+				</a>
+				<a href="/appli/deconnexion" class="btn btn-danger btn-xs pull-right" >
+					Déconnexion <span class="glyphicon glyphicon-off"></span>
+				</a>
 			</div>
 
-			<div class="row text-center">
+			<div class="row">
 				<h1 class="text-center"><small>Bienvenue {{user.username}}</small></h1>	
 			</div>
-
-		
 		</header>
 
 		<div class="container theme-showcase">			
-			<div class="jumbotron col-md-6 col-sm-7" id="question">
-				<h3>Rechercher une question</h3>
-				<form method="POST">{% csrf_token %}
-					<input type="text" class="input-medium search-query typeahead">
-					<button type="submit" class="btn btn-primary">Rechercher</button>
-				</form>
-
+			<div class="jumbotron col-sm-6 col-md-5" id="question">
 				<h3>Questions</h3>
-				<ul id="listeQuestion" class="list-unstyled">
+				<input type="text" class="input-sm typeahead" placeholder="Rechercher question"/>
+				<ul id="listeQuestion" class="list-unstyled"> 
 					{% for question in question_list %}
-						<li><a href="/appli/accueil/{{question.id}}" title="cliquer ici pour accéder à la question">
-						{{ question.libelle }} </a> </li>
-						
+						<li>
+							<a href="{% url 'affichageQuestion' question_id=question.id %}" title="cliquer ici pour accéder à la question">
+								{{ question.libelle }}
+							</a>
+						</li>
 					{% endfor %}
 				</ul>
 			</div>
 
 			{% if question %}			
-			<div class="col-md-5 col-md-offset-1 col-sm-4 col-sm-offset-1 well" id="afficherQuestion">
-				<form method="POST" action="/appli/question/{{ question_id }}/">{% csrf_token %}
-					<b>{{ question }}</b>
-					<p>Temps pour répondre : {{ temps }} secondes</p>
+				<div class="col-md-6 col-md-offset-1 col-sm-5 col-sm-offset-1 well" id="afficherQuestion">
+					<form method="POST" action="{% url 'question_posee' question_posee_id=question_id %}">{% csrf_token %}
+						<h3><b>{{ question }}</b></h3>
+						<p>Temps pour répondre : {{ temps }} secondes</p>
 
-					<p>Réponses possibles :
-						<ul>
-							{% for reponse in maReponse %}{{ question.id }}
-								<li>{{ reponse.libelle }}
-								{% if reponse.reponseValide == True %}
-									Vrai
-								{% elif reponse.reponseValide == False %}
-									Faux
-								{% endif %}
-								</li>
-
-							{% endfor %}
-						</ul>
-					</p>
-					<div class="text-center">
-						<button type="submit" class="btn btn-primary">Charger la question</button>
-					</div>
-				</form>
-			</div>
-			{% else %}
+						<p>Réponses possibles :
+							<ul>
+								{% for reponse in maReponse %}{{ question.id }}
+									<li>{{ reponse.libelle }}
+										{% if reponse.reponseValide == True %}
+											<span class="glyphicon glyphicon-ok"></span>
+										{% elif reponse.reponseValide == False %}
+											<span class="glyphicon glyphicon-remove"></span>
+										{% endif %}
+									</li>
+								{% endfor %}
+							</ul>
+						</p>
+						<div class="text-center">
+							<button type="submit" class="btn btn-primary">Charger la question</button>
+						</div>
+					</form>
+				</div>
 			{% endif %}
 		</div>
 	</body>
