@@ -5,23 +5,30 @@
 		<meta CHARSET="utf-8" />
 		<!-- Librairire bootstrap-->
 		{% load staticfiles %}
+		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
 		<script src='{% static "appli/bootstrap/js/bootstrap.min.js" %}'></script>
 		<link rel="stylesheet" type="text/css" href='{% static "appli/css/style.css" %}' media="screen" />
 		<!--Autres-->
+			
 		<script type="text/javascript" src='{% static "appli/js/canvasjs.min.js" %}'></script>
-		<script src='{% static "appli/js/styleSup.js" %}'></script>
-		<script src='{% static "appli/js/jquery.js" %}'></script>	
-		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
+				$(function() {
+					$('#datetimepicker3').datetimepicker({
+						pickDate: false
+					});
+				});
+
 				$("input[name='champReponses_lib']").val("");
 				$("input[name='champReponses_bool']").val("");
 
 				var MAX_FIELDS = 9;
 				var fields = 1;
 				var insertion;
+				var heure, minute, seconde;
 
 				$(":input[name='add']").click(function(e) {
 					e.preventDefault();
@@ -33,6 +40,12 @@
 				});
 
 				$(":button[name='submit']").click(function() {
+
+					heure = $("select[name='listeHeure']").val() <= 9 ? "0"+$("select[name='listeHeure']").val() : $("select[name='listeHeure']").val();
+					minute = $("select[name='listeMinute']").val() <= 9 ? "0"+$("select[name='listeMinute']").val() : $("select[name='listeMinute']").val();
+					seconde = $("select[name='listeSeconde']").val() <= 9 ? "0"+$("select[name='listeSeconde']").val() : $("select[name='listeSeconde']").val();
+					$("input[name='temps']").val(heure +':'+ minute +':'+ seconde);
+
 					$("input[name='reponse']").each(function(){
 						if ($("input[name='champReponses_lib']").val() == "") {
 							$("input[name='champReponses_lib']").val($("input[name='reponse']:first").val());
@@ -62,6 +75,7 @@
 
 			<form class="well" method="POST">{% csrf_token %}
 				<fieldset>
+<!-- TYPE QUESTION -->
 					<legend class="legend">Création de question</legend>
 					<div class="row">
 						<div class="col-sm-4 col-md-3 col-lg-3" >
@@ -69,7 +83,7 @@
 						</div>
 					</div>
 
-<!-- QUESTION -->
+<!-- LIBELLE QUESTION -->
 					<div class="row">
 						<div class="col-sm-4 col-md-3 col-lg-3"><br/>
 							<label for="id_intituleQuestion" title="Saisissez un intitulé de question">Intitulé de la question :</label><br/>
@@ -77,15 +91,19 @@
 						</div>
 					</div>
 
-<!-- TEMPS -->
+<!-- TEMPS QUESTION -->
 					<div class="row"><br/>
-						<div class="col-sm-4 col-md-3 col-lg-3">								
+						<div class="col-sm-4 col-md-3 col-lg-3">
 							<label for="id_temps" title="Saisissez une durée pour la question">Durée (en secondes):</label><br/>
 							{{ form.temps }}
+							{{ form.listeHeure }}
+							{{ form.listeMinute }}
+							{{ form.listeSeconde }}
 						</div>
 					</div>
 
-<!-- REPONSES -->
+
+<!-- REPONSES QUESTION -->
 					<div id="reponses" class="row">
 						<div class="col-xs-7 col-sm-4 col-md-4 col-lg-3"><br/>
 							<label for="reponses">Réponse(s) :</label><br>
@@ -95,7 +113,7 @@
 						</div>
 					</div>
 
-<!-- CREATION -->
+<!-- CREATION QUESTION -->
 					<div class="row">
 						<div class="col-sm-4 col-md-3 col-lg-3"><br/>
 							<button name="submit" class="btn btn-primary btn-large" title="cliquer ici pour créer la question">Créer la Question </button>
