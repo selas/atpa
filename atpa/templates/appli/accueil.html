@@ -3,17 +3,19 @@
 	<head>
 		<title>Accueil Enseignant</title>
 		<meta CHARSET="utf-8" />
-		<!-- Librairire bootstrap-->
+
 		{% load staticfiles %}
+		<!-- CSS -->
 		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap.min.css" %}' media="screen" />
-		<link rel="stylesheet" href='{% static "appli/bootstrap/css/bootstrap-responsive.min.css" %}' media="screen" />
 		<link rel="stylesheet" href='{% static "appli/css/typeahead.css" %}' media="screen" />
-		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> <!--CSS perso -->
-		<!--Autres-->
-		<script type="text/javascript" src='{% static "appli/jquery-qrcode-master/src/jquery.qrcode.min.js" %}'></script>
-		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
+		<link rel="stylesheet" href='{% static "appli/css/style.css" %}' media="screen" /> 
+		<!-- JS -->
+		
 		<script type="text/javascript" src='{% static "appli/js/jquery.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/jquery-qrcode-master/src/jquery.qrcode.min.js" %}'></script>
 		<script type="text/javascript" src='{% static "appli/js/typeahead.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/bootstrap/js/bootstrap.min.js" %}'></script>
+		<script type="text/javascript" src='{% static "appli/js/styleSup.js" %}'></script>
 
 		<script type="text/javascript">
 			$(function(){
@@ -58,7 +60,7 @@
 						}
 					};
 				});
-				
+
 			});
 		</script>
 	</head>
@@ -100,21 +102,36 @@
 				<div class="col-md-6 col-md-offset-1 col-sm-5 col-sm-offset-1 well" id="afficherQuestion">
 					<form method="POST" action="{% url 'question_posee' question_posee_id=question_id %}">{% csrf_token %}
 						<b>{{ question }}</b>
-						<p>Temps pour répondre : {{ temps }} secondes</p>
+						<p>Temps pour répondre : {{ temps }}</p>
 
-						<p>Réponses possibles :
-							<ul>
-								{% for reponse in maReponse %}{{ question.id }}
-									<li>{{ reponse.libelle }}
-										{% if reponse.reponseValide == True %}
-											<span class="glyphicon glyphicon-ok"></span>
-										{% elif reponse.reponseValide == False %}
-											<span class="glyphicon glyphicon-remove"></span>
-										{% endif %}
-									</li>
-								{% endfor %}
-							</ul>
-						</p>
+						<div class="panel-group" id="accordion">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+						      		<h4 class="panel-title">
+							        	<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+							          		Réponses possibles :
+							        	</a>
+						      		</h4>
+							    </div>
+							    <div id="collapseOne" class="panel-collapse collapse">
+							      	<div class="panel-body">
+							        	<ul>
+											{% for reponse in maReponse %}{{ question.id }}
+												<li class='noneStyle'>
+													{% if reponse.reponseValide == True %}
+														<span class="glyphicon glyphicon-ok"></span>
+													{% elif reponse.reponseValide == False %}
+														<span class="glyphicon glyphicon-remove"></span>
+													{% endif %}
+													{{ reponse.libelle }}
+												</li>
+											{% endfor %}
+										</ul>
+							      	</div>
+							    </div>
+						  	</div>
+					  	</div>
+  						
 						<div class="text-center">
 							<button type="submit" class="btn btn-primary">Charger la question</button>
 						</div>
