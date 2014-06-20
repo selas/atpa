@@ -175,8 +175,8 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 			 	'reponses':reponses 
 			 	})
 
-
 		return redirect("accueil")
+
 	else:
 		if enseignant_id :
 
