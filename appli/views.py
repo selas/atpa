@@ -244,6 +244,23 @@ def reponse(request, question_ligne_id):
 
 	return redirect("accueil") 
 
+def stats(request, question_ligne_id):
+	question_ligne = Question_ligne.objects.get(pk=question_ligne_id)
+	reponses = Reponse_ligne.objects.filter(question=question_ligne)
+	reponsesArray = reponses.values('reponse').distinct()
+	# return HttpResponse(reponsesArray)
+	reponsesArrayFinal = []
+	labelReponses = []
+	nbReponses = []
+	for reponse in reponsesArray:
+		rep = Reponse.objects.get(pk=reponse["reponse"])
+		nb = reponses.filter(reponse=reponse["reponse"]).count()
+ 		labelReponses.append(rep.libelle)
+ 		nbReponses.append(nb)
+ 		reponsesArrayFinal.append({'labelReponses':rep.libelle, 'nbReponses':nb})
+
+	return render(request, 'appli/stats.html', {'labelReponses':labelReponses, 'nbReponses': nbReponses, 'reponsesArrayFinal':reponsesArrayFinal})
+
 
 def IP():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

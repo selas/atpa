@@ -119,9 +119,9 @@
 											{% for reponse in maReponse %}{{ question.id }}
 												<li class='noneStyle'>
 													{% if reponse.reponseValide == True %}
-														<span class="glyphicon glyphicon-ok"></span>
+														<span class="glyphicon glyphicon-ok" style='color:green'></span>
 													{% elif reponse.reponseValide == False %}
-														<span class="glyphicon glyphicon-remove"></span>
+														<span class="glyphicon glyphicon-remove" style='color:red'></span>
 													{% endif %}
 													{{ reponse.libelle }}
 												</li>
