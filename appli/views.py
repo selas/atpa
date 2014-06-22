@@ -190,8 +190,8 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 
 			if qu["dateDebut"] :
 				question_ligne = Question_ligne.objects.get(dateDebut=qu["dateDebut"])
-
-				dateFinished = question_ligne.dateDebut + timedelta(seconds=question_ligne.dureeActivite)
+				duree = question_ligne.dureeActivite
+				dateFinished = question_ligne.dateDebut + timedelta(hours=duree.hour, minutes=duree.minute, seconds=duree.second)
 				
 				naive = datetime.utcnow()
 				aware = naive.replace(tzinfo=timezone.utc)
@@ -217,8 +217,10 @@ def reponse(request, question_ligne_id):
 
 		#recupere la question en ligne correspondant 
 		question_ligne = Question_ligne.objects.get(pk=question_ligne_id)
-
-		dateFinished = question_ligne.dateDebut + timedelta(seconds=question_ligne.dureeActivite)
+		duree = question_ligne.dureeActivite
+		dateFinished = question_ligne.dateDebut + timedelta(hours=duree.hour, minutes=duree.minute, seconds=duree.second)
+					
+		# dateFinished = question_ligne.dateDebut + timedelta(seconds=question_ligne.dureeActivite)
 		
 		naive = datetime.utcnow()
 		aware = naive.replace(tzinfo=timezone.utc)

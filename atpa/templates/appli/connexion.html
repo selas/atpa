@@ -52,7 +52,11 @@
 				<option>Sélectionnez l'enseignant</option> 	
 				{% for user in users %}
 					<option value="{{user.id}}" href="{% url 'question_reponse' enseignant_id=user.id %}">
-						{{user.last_name}} {{user.first_name}}
+						{% if user.last_name == null and user.first_name == null %}
+							{{user.last_name}} {{user.first_name}}
+						{% else %}
+							{{user.username}}
+						{% endif %}
 					</option>
 				{% endfor %}
 			</select>
