@@ -201,15 +201,9 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 					reponses = Reponse.objects.filter(question=question_ligne.question)
 					return render(request, 'appli/enseignant_question.html', {
 						'question_ligne':question_ligne,
-<<<<<<< HEAD
-					 	'reponses':reponses
-					 	 })
-
-=======
 						'reponses':reponses
 						})
 
->>>>>>> 16ee2d7e90888f644065a21405b363887ab23848
 		return render(request, 'appli/enseignant_question.html', {})
 
 
@@ -259,19 +253,11 @@ def stats(request, question_ligne_id):
 	labelReponses = []
 	nbReponses = []
 	for reponse in reponsesArray:
-<<<<<<< HEAD
-	    rep = Reponse.objects.get(pk=reponse["reponse"])
-	    nb = reponses.filter(reponse=reponse["reponse"]).count()
-	    labelReponses.append(rep.libelle)
-	    nbReponses.append(nb)
-	    reponsesArrayFinal.append({'labelReponses':rep.libelle, 'nbReponses':nb})
-=======
 		rep = Reponse.objects.get(pk=reponse["reponse"])
 		nb = reponses.filter(reponse=reponse["reponse"]).count()
 		labelReponses.append(rep.libelle)
 		nbReponses.append(nb)
 		reponsesArrayFinal.append({'labelReponses':rep.libelle, 'nbReponses':nb})
->>>>>>> 16ee2d7e90888f644065a21405b363887ab23848
 
     return render(request, 'appli/stats.html', {'labelReponses':labelReponses, 'nbReponses': nbReponses, 'reponsesArrayFinal':reponsesArrayFinal})
 
