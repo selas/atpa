@@ -83,7 +83,7 @@ def affichageQuestion(request, question_id=None):
 
 		return render(request, 'appli/accueil.html', { 
 			'question_id': question_id, 'question': question, 'temps': temps,
-		 	'maReponse': maReponse, 'question_list' : question_list
+			'maReponse': maReponse, 'question_list' : question_list
 			})
 		
 	else:
@@ -172,8 +172,8 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 			
 			return render(request, 'appli/enseignant_question.html', { 
 				'question_ligne':question_ligne,
-			 	'reponses':reponses 
-			 	})
+				'reponses':reponses 
+				})
 
 		return redirect("accueil")
 
@@ -201,8 +201,8 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 					reponses = Reponse.objects.filter(question=question_ligne.question)
 					return render(request, 'appli/enseignant_question.html', { 
 						'question_ligne':question_ligne,
-					 	'reponses':reponses
-					 	 })
+						'reponses':reponses
+						})
 			
 		return render(request, 'appli/enseignant_question.html', {})
 
@@ -255,14 +255,14 @@ def stats(request, question_ligne_id):
 	for reponse in reponsesArray:
 		rep = Reponse.objects.get(pk=reponse["reponse"])
 		nb = reponses.filter(reponse=reponse["reponse"]).count()
- 		labelReponses.append(rep.libelle)
- 		nbReponses.append(nb)
- 		reponsesArrayFinal.append({'labelReponses':rep.libelle, 'nbReponses':nb})
+		labelReponses.append(rep.libelle)
+		nbReponses.append(nb)
+		reponsesArrayFinal.append({'labelReponses':rep.libelle, 'nbReponses':nb})
 
 	return render(request, 'appli/stats.html', {'labelReponses':labelReponses, 'nbReponses': nbReponses, 'reponsesArrayFinal':reponsesArrayFinal})
 
 
 def IP():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(('google.com', 0))
-    return s.getsockname()[0]
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	s.connect(('google.com', 0))
+	return s.getsockname()[0]
