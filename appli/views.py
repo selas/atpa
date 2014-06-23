@@ -29,7 +29,7 @@ def connexion(request):
 			if user.is_active:
 				login(request, user)
 				# Redirect to a success page.
-				return redirect("accueil") 
+				return redirect("accueil")
 
 			else:
 				# Return a 'disabled account' error message
@@ -41,9 +41,9 @@ def connexion(request):
 
 	else:
 		# Un formulaire vide
-		form = Connexion() 
+		form = Connexion()
 		#On recupere le group ayant pour nom enseignant
-		group = Group.objects.filter(name='enseignant' ) 
+		group = Group.objects.filter(name='enseignant' )
 		#On recupere les utilisateurs ayant pour group celui precedemment recupere
 		users = User.objects.filter(groups=group )
 
@@ -72,20 +72,20 @@ def affichageQuestion(request, question_id=None):
 	if question_id:
 
 		maQuestion = Question.objects.get(pk=question_id)
-		
+
 		question = maQuestion.libelle
-		
+
 		temps = maQuestion.temps
-		
+
 		maReponse = Reponse.objects.filter(question=maQuestion)
-		
+
 		question_list = Question.objects.filter(enseignant=request.user)
 
-		return render(request, 'appli/accueil.html', { 
+		return render(request, 'appli/accueil.html', {
 			'question_id': question_id, 'question': question, 'temps': temps,
 		 	'maReponse': maReponse, 'question_list' : question_list
 			})
-		
+
 	else:
 
 		question = 'pas question'
@@ -162,17 +162,17 @@ def new_question(request):
 def question_posee(request, question_posee_id=None, enseignant_id=None):
 	if request.user.is_authenticated():
 		if request.method == 'POST' :
-			
+
 			question = Question.objects.get(pk=question_posee_id)
 
 			question_ligne = Question_ligne(question=question, dureeActivite=question.temps)
 			question_ligne.save()
 
 			reponses = Reponse.objects.filter(question=question_ligne.question)
-			
-			return render(request, 'appli/enseignant_question.html', { 
+
+			return render(request, 'appli/enseignant_question.html', {
 				'question_ligne':question_ligne,
-			 	'reponses':reponses 
+			 	'reponses':reponses
 			 	})
 
 		return redirect("accueil")
@@ -192,18 +192,18 @@ def question_posee(request, question_posee_id=None, enseignant_id=None):
 				question_ligne = Question_ligne.objects.get(dateDebut=qu["dateDebut"])
 				duree = question_ligne.dureeActivite
 				dateFinished = question_ligne.dateDebut + timedelta(hours=duree.hour, minutes=duree.minute, seconds=duree.second)
-				
+
 				naive = datetime.utcnow()
 				aware = naive.replace(tzinfo=timezone.utc)
 
 				if aware < dateFinished:
 
 					reponses = Reponse.objects.filter(question=question_ligne.question)
-					return render(request, 'appli/enseignant_question.html', { 
+					return render(request, 'appli/enseignant_question.html', {
 						'question_ligne':question_ligne,
 					 	'reponses':reponses
 					 	 })
-			
+
 		return render(request, 'appli/enseignant_question.html', {})
 
 
@@ -215,19 +215,19 @@ def reponse(request, question_ligne_id):
 		question = Question.objects.get(pk=idQuestion)
 		ip = IP()
 
-		#recupere la question en ligne correspondant 
+		#recupere la question en ligne correspondant
 		question_ligne = Question_ligne.objects.get(pk=question_ligne_id)
 		duree = question_ligne.dureeActivite
 		dateFinished = question_ligne.dateDebut + timedelta(hours=duree.hour, minutes=duree.minute, seconds=duree.second)
-					
+
 		# dateFinished = question_ligne.dateDebut + timedelta(seconds=question_ligne.dureeActivite)
-		
+
 		naive = datetime.utcnow()
 		aware = naive.replace(tzinfo=timezone.utc)
 
 		if aware < dateFinished:
 
-			#Recupere le nombre d'enregistrement present dans la bdd 
+			#Recupere le nombre d'enregistrement present dans la bdd
 			#en fonction de l'utilisateur et de la question mise en ligne
 			reponse_ligne = Reponse_ligne.objects.filter(question=question_ligne, ip=ip).count()
 
@@ -238,11 +238,11 @@ def reponse(request, question_ligne_id):
 						reponses = Reponse.objects.filter(question=question_ligne.question)
 						reponse_ligne = Reponse_ligne(question=question_ligne, reponse=idReponse, ip=ip)
 						reponse_ligne.save()
-			else : 
+			else :
 				error = "true"
 				return render(request, 'appli/enseignant_question.html', {'error':error})
 
-	return redirect("accueil") 
+	return redirect("accueil")
 
 def stats(request, question_ligne_id):
 	question_ligne = Question_ligne.objects.get(pk=question_ligne_id)
@@ -253,13 +253,13 @@ def stats(request, question_ligne_id):
 	labelReponses = []
 	nbReponses = []
 	for reponse in reponsesArray:
-		rep = Reponse.objects.get(pk=reponse["reponse"])
-		nb = reponses.filter(reponse=reponse["reponse"]).count()
- 		labelReponses.append(rep.libelle)
- 		nbReponses.append(nb)
- 		reponsesArrayFinal.append({'labelReponses':rep.libelle, 'nbReponses':nb})
+	    rep = Reponse.objects.get(pk=reponse["reponse"])
+	    nb = reponses.filter(reponse=reponse["reponse"]).count()
+	    labelReponses.append(rep.libelle)
+	    nbReponses.append(nb)
+	    reponsesArrayFinal.append({'labelReponses':rep.libelle, 'nbReponses':nb})
 
-	return render(request, 'appli/stats.html', {'labelReponses':labelReponses, 'nbReponses': nbReponses, 'reponsesArrayFinal':reponsesArrayFinal})
+    return render(request, 'appli/stats.html', {'labelReponses':labelReponses, 'nbReponses': nbReponses, 'reponsesArrayFinal':reponsesArrayFinal})
 
 
 def IP():
