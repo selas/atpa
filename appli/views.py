@@ -259,7 +259,7 @@ def stats(request, question_ligne_id):
 		nbReponses.append(nb)
 		reponsesArrayFinal.append({'labelReponses':rep.libelle, 'nbReponses':nb})
 
-    return render(request, 'appli/stats.html', {'labelReponses':labelReponses, 'nbReponses': nbReponses, 'reponsesArrayFinal':reponsesArrayFinal})
+	return render(request, 'appli/stats.html', {'labelReponses':labelReponses, 'nbReponses': nbReponses, 'reponsesArrayFinal':reponsesArrayFinal})
 
 
 def IP():
